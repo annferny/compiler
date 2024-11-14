@@ -78,7 +78,7 @@ tMorph *Lex(void) {
         /* Berechnung des Folgezustands */
         Zn = vSMatrix[Z][vZKl[X & 0x7f]].zustand;
         /* Ausfuehrung der Aktion (Ausgabefunktion */
-        vfx((vSMatrix[Z][vZKl[X & 0x7f]])).aktion();
+        vfx[(vSMatrix[Z][vZKl[X & 0x7f]]).aktion]();
         /* Automat schaltet */
         Z = Zn;
     } while (Ende == 0);

@@ -17,11 +17,11 @@ int main(int argc, void *argv[])
         switch (Morph.MC)
         {
         case mcSymb:
-            if (Morph.Val.Symb == zErg)
+            if (Morph.Val.Symb == zERG)
                 printf("Symbol,:=\n");
-            else if (Morph.Val.Symb == zle)
+            else if (Morph.Val.Symb == zLE)
                 printf("Symbol,<=\n");
-            else if (Morph.Val.Symb == zge)
+            else if (Morph.Val.Symb == zGE)
                 printf("Symbol,>=\n");
             else if (Morph.Val.Symb == zBGN)
                 printf("Symbol,_BEGIN\n");
@@ -50,7 +50,7 @@ int main(int argc, void *argv[])
                 printf("Symbol,%c\n", (char)Morph.Val.Symb);
             break;
         case mcNum:
-            printf("Zahl  ,%ld\n", Morph.Val.Numb);
+            printf("Zahl  ,%ld\n", Morph.Val.Num);
             break;
         case mcIdent:
             printf("Ident ,%s\n", (char *)Morph.Val.pStr);
