@@ -23,9 +23,9 @@ typedef enum T_MC
 typedef enum T_ZS
 {
     zNIL,
-    zERG = 128,
-    zLE,
-    zGE,
+    zERG = 128, // :=
+    zLE,        // <=
+    zGE,        // >=
     zBGN,
     zCLL,
     zCST,

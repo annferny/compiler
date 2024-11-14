@@ -2,13 +2,20 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 #include "lex.h"
 
-tMorph Morph = {0};
+ extern tMorph Morph;
 
 int main(int argc, void *argv[])
 {
+    if (argc != 2) {
+        printf("Error: enter file name\n");
+        exit(-1);
+    }
+
+   
     initLex(argv[1]);
     do
     {
@@ -56,7 +63,10 @@ int main(int argc, void *argv[])
             printf("Ident ,%s\n", (char *)Morph.Val.pStr);
             break;
         }
+
+        //getchar();
     } while (!(Morph.MC == mcSymb && Morph.Val.Symb == -1));
+
     puts("");
     return 0;
 }
