@@ -115,7 +115,10 @@ static void fslb(void) {
 static void fb() {
     int i, j;
     switch (Z) {
-        /* Symbol */
+        case 2: 
+            Morph.Val.pStr=vBuf;
+            Morph.MC = mcIdent;
+            break;
         case 3: // :
         case 4: // <
         case 5: // >
