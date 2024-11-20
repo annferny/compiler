@@ -4,177 +4,181 @@
 #include <ctype.h>
 #include "lex.h"
 
-static FILE *pIF;        /* Quellfile 				*/
+static FILE *pointedFile; /* Quellfile 				*/
 static tMorph MorphInit; /* Morphem   				*/
 tMorph Morph;
-static int X;                     /* Aktuelles Eingabezeichen 		*/
-static int Z;                     /* Aktueller Zustand des Automaten 	*/
+static int actualInputSymbol; /* Aktuelles Eingabezeichen 		*/
+static int actualStateOfAutomat; /* Aktueller Zustand des Automaten 	*/
 static char vBuf[128 + 1], *pBuf; /* Ausgabepuffer */
-static int line, col;             // Zeile und Spalte
-static int Ende;                  /* Flag 				*/
+static int line, column; // Zeile und Spalte
+static int endFlag; /* Flag 				*/
 
-char *keyWords[] = {"BEGIN", "CALL", "CONST", "DO", "END"};
+char *keyWords[] = {"BEGIN", "CALL", "CONST", "DO", "END", "IF", "ODD", "PROCEDURE", "THEN", "VAR", "WHILE"};
 
 /*---- Initialisierung der lexiaklischen Analyse ----*/
-int initLex(char *fname)
-{
-    pIF = fopen(fname, "r+t");
-    if (pIF)
-        X = fgetc(pIF);
-    Morph.MC = mcEmpty;
-    return (int)pIF;
+FILE* initLexer(char *fname) {
+    pointedFile = fopen(fname, "r+t");
+    if (pointedFile)
+        actualInputSymbol = fgetc(pointedFile);
+    Morph.morphemeCode = morphemeCodeEmpty;
+    return pointedFile;
 }
 
 /* Zeichenklassenvektor */
 
-static char vZKl[128] =
-    /*     0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F      */
-    /*---------------------------------------------------------*/
-    {
-        /* 0*/ 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, /* 0*/
-        /*10*/ 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, /*10*/
-        /*20*/ 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*20*/
-        /*30*/ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 5, 4, 6, 0, /*30*/
-        /*40*/ 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, /*40*/
-        /*50*/ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, /*50*/
-        /*60*/ 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, /*60*/
-        /*70*/ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 7  /*70*/
-};
+static char characterClassVector[128] =
+        /*     0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F      */
+        /*---------------------------------------------------------*/
+        {
+            /* 0*/ 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, /* 0*/
+            /*10*/ 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, /*10*/
+            /*20*/ 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*20*/
+            /*30*/ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 5, 4, 6, 0, /*30*/
+            /*40*/ 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, /*40*/
+            /*50*/ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, /*50*/
+            /*60*/ 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, /*60*/
+            /*70*/ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 7  /*70*/
+        };
 
 /* Automatentabelle */
 
-static entry vSMatrix[][8] =
-    {
-        {{9, ifslb}, {1, ifsl}, {2, ifgl}, {3, ifsl}, {9, ifslb}, {4, ifsl}, {5, ifsl}, {0, ifl}},
-        {{9, ifb}, {1, ifsl}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}},
-        {{9, ifb}, {2, ifsl}, {2, ifgl}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}},
-        {{9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {6, ifsl}, {9, ifb}, {9, ifb}, {9, ifb}},
-        {{9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {7, ifsl}, {9, ifb}, {9, ifb}, {9, ifb}},
-        {{9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {8, ifsl}, {9, ifb}, {9, ifb}, {9, ifb}},
-        {{9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}},
-        {{9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}},
-        {{9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}, {9, ifb}},
+static entry automatTable[][8] =
+{
+    {{9, ifWriteReadEnd}, {1, ifWriteRead}, {2, ifWriteAsCapitalLetters}, {3, ifWriteRead}, {9, ifWriteReadEnd}, {4, ifWriteRead}, {5, ifWriteRead}, {0, ifRead}},
+    {{9, ifEnd},          {1, ifWriteRead}, {9, ifEnd},                   {9, ifEnd},       {9, ifEnd},          {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
+    {{9, ifEnd},          {2, ifWriteRead}, {2, ifWriteAsCapitalLetters}, {9, ifEnd},       {9, ifEnd},          {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
+    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {6, ifWriteRead},    {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
+    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {7, ifWriteRead},    {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
+    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {8, ifWriteRead},    {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
+    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {9, ifEnd},          {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
+    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {9, ifEnd},          {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
+    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {9, ifEnd},          {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
 };
 
 /* Ausgabefunktionen des Automaten */
-static void fl(void);
+static void read(void);
 
-static void fb(void);
+static void end(void);
 
-static void fgl(void);
+static void writeAsCapitalLetters(void);
 
-static void fsl(void);
+static void writeRead(void);
 
-static void fslb(void);
+static void writeReadEnd(void);
 
-typedef void (*FX)(void);
+typedef void (*FunctionPointer)(void);
 
-static FX vfx[] = {fl, fb, fgl, fsl, fslb};
+static FunctionPointer vectorPointersToFunctions[] = {read, end, writeAsCapitalLetters, writeRead, writeReadEnd};
 
 /*---- Lexikalische Analyse ----*/
-tMorph *Lex(void)
-{
-
-    int Zn;
-    Z = 0;
+tMorph *Lexer(void) {
+    actualStateOfAutomat = 0;
     Morph = MorphInit;
     pBuf = vBuf;
-    Ende = 0;
-    do
-    {
+    endFlag = 0;
+    do {
         // printf("in lex: %c ", X);
         // printf("akt. Zustand: %d ", Z);
 
         // TODO: delete after parser addition
-        if (X == EOF && Z == 0)
-        {
-            Morph.MC = mcSymb;
-            Morph.Val.Symb = -1;
+        if (actualInputSymbol == EOF && actualStateOfAutomat == 0) {
+            Morph.morphemeCode = morphemeCodeSymbol;
+            Morph.Value.symbol = -1;
             return &Morph;
         }
 
         /* Berechnung des Folgezustands */
-        Zn = vSMatrix[Z][vZKl[X & 0x7f]].zustand;
+        const int nextState = automatTable[actualStateOfAutomat][characterClassVector[actualInputSymbol & 0x7f]].state;
         /* Ausfuehrung der Aktion (Ausgabefunktion */
-        vfx[(vSMatrix[Z][vZKl[X & 0x7f]]).aktion]();
+        vectorPointersToFunctions[automatTable[actualStateOfAutomat][characterClassVector[actualInputSymbol & 0x7f]].action]();
         /* Automat schaltet */
-        Z = Zn;
+        actualStateOfAutomat = nextState;
         // printf("neuer Zustand: %d\n", Z);
-    } while (Ende == 0);
+    } while (endFlag == 0);
     return &Morph;
 }
 
 /*---- lesen ----*/
-static void fl(void)
-{
-    X = fgetc(pIF);
-    if (X == '\n')
-        line++, col = 0;
+static void read(void) {
+    actualInputSymbol = fgetc(pointedFile);
+    if (actualInputSymbol == '\n')
+        line++, column = 0;
     else
-        col++;
+        column++;
 }
 
 /*---- schreiben als Grossbuchstabe, lesen ----*/
-static void fgl(void)
-{
-    *pBuf = (char)toupper(X); // oder *Buf=(char)X&0xdf;
+static void writeAsCapitalLetters(void) {
+    *pBuf = (char) toupper(actualInputSymbol); // oder *Buf=(char)X&0xdf;
     *(++pBuf) = 0;
-    fl();
+    read();
 }
 
 /*---- schreiben, lesen ----*/
-static void fsl(void)
-{
-    *pBuf = (char)X;
+static void writeRead(void) {
+    *pBuf = (char) actualInputSymbol;
     *(++pBuf) = 0;
-    fl();
+    read();
 }
 
 /*---- schreiben, lesen, beenden ----*/
-static void fslb(void)
-{
-    fsl();
-    fb();
+static void writeReadEnd(void) {
+    writeRead();
+    end();
 }
 
-static void fb()
-{
-    int i, j;
-    switch (Z)
-    {
-    case 0:
-        Morph.Val.Symb = vBuf[0];
-        Morph.MC = mcSymb;
-        break;
-    /* Zahl */
-    case 1:
-        Morph.Val.Num = atol(vBuf);
-        Morph.MC = mcNum;
-        break;
-    /* Ident */
-    case 2:
-        int i = 0;
-        for (i; i < sizeof(keyWords) / sizeof(keyWords[0]); i++)
-            if (strcmp(vBuf, keyWords[i]) == 0)
-                break;
-        if (i < sizeof(keyWords) / sizeof(keyWords[0]))
-        {
-            Morph.Val.Symb = zBGN + i;
-            Morph.MC = mcSymb;
-        }
-        else
-        {
-            Morph.Val.pStr = vBuf;
-            Morph.MC = mcIdent;
-        }
-        break;
-    /* : */
-    case 3:
-        Morph.Val.Symb = vBuf[0];
-        Morph.MC = mcIdent;
-        break;
-    case 4: // <
-    case 5: // >
+static void end() {
+    int i;
+    const size_t numKeywords = sizeof(keyWords) / sizeof(keyWords[0]);
+
+    switch (actualStateOfAutomat) {
+        /* Symbol */
+        case 0: // other symbols
+        case 3: // :
+        case 4: // <
+        case 5: // >
+            Morph.Value.symbol = vBuf[0];
+            Morph.morphemeCode = morphemeCodeSymbol;
+            break;
+        /* Zahl */
+        case 1:
+            Morph.Value.number = atol(vBuf);
+            Morph.morphemeCode = morphemeCodeNumber;
+            break;
+        /* Ident */
+        case 2:
+            for (i = 0; i < numKeywords; i++) {
+                if (strcmp(vBuf, keyWords[i]) == 0) {
+                    break;
+                }
+            }
+            if (i < numKeywords) {
+                Morph.Value.symbol = zBegin + i;
+                Morph.morphemeCode = morphemeCodeSymbol;
+            } else {
+                Morph.Value.string = vBuf;
+                Morph.morphemeCode = morphemeCodeIdentifier;
+            }
+            break;
+        /* Ergibtzeichen */
+        case 6:
+            Morph.Value.symbol = (long) zResult;
+            Morph.morphemeCode = morphemeCodeSymbol;
+            break;
+        /* KleinerGleich */
+        case 7:
+            Morph.Value.symbol = (long) zLessOrEqual;
+            Morph.morphemeCode = morphemeCodeSymbol;
+            break;
+        /* GroesserGleich */
+        case 8:
+            Morph.Value.symbol = (long) zGreaterOrEqual;
+            Morph.morphemeCode = morphemeCodeSymbol;
+            break;
+
+        default:
+            printf("Unknown value %d\n", actualStateOfAutomat);
+            break;
     }
-    Ende = 1; // entfällt bei Variante mit Zustand zEnd
+    endFlag = 1; // entfällt bei Variante mit Zustand zEnd
 }

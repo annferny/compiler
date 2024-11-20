@@ -1,63 +1,61 @@
-// Arnold Beck
-
 // Funktionsindex *0x10, bzw. *16
 typedef enum T_Fx
 {
-    ifl,
-    ifb,
-    ifgl,
-    ifsl,
-    ifslb
-} tFx;
+    ifRead,
+    ifEnd,
+    ifWriteAsCapitalLetters,
+    ifWriteRead,
+    ifWriteReadEnd
+} tFunctionsIndex;
 
 /* Morphemcodes */
 typedef enum T_MC
 {
-    mcEmpty,
-    mcSymb,
-    mcNum,
-    mcIdent,
-    mcStrng
-} tMC;
+    morphemeCodeEmpty,
+    morphemeCodeSymbol,
+    morphemeCodeNumber,
+    morphemeCodeIdentifier,
+    morphemeCodeString
+} tMorphemeCodes;
 
 typedef enum T_ZS
 {
     zNIL,
-    zERG = 128, // :=
-    zLE,        // <=
-    zGE,        // >=
-    zBGN,
-    zCLL,
-    zCST,
-    zDO,
-    zEND,
-    zIF,
-    zODD,
-    zPRC,
-    zTHN,
-    zVAR,
-    zWHL
-} tZS;
+    zResult = 128, // :=
+    zLessOrEqual,        // <=
+    zGreaterOrEqual,        // >=
+    zBegin,
+    zCall,
+    zConst,
+    zDo,
+    zEnd,
+    zIf,
+    zOdd,
+    zProcedure,
+    zThen,
+    zVar,
+    zWhile
+} tSpecialSymbols;
 
 typedef struct
 {
-    tMC MC;      /* Morphemcode */
-    int PosLine; /* Zeile       */
-    int PosCol;  /* Spalte      */
+    tMorphemeCodes morphemeCode;      /* Morphemcode */
+    int positionOfLine; /* Zeile       */
+    int positionOfColumn;  /* Spalte      */
     union VAL
     {
-        long Num;
-        char *pStr;
-        int Symb;
-    } Val;
-    int MLen; /* Morphemlänge*/
+        long number;
+        char *string;
+        int symbol;
+    } Value;
+    int morphemeLength; /* Morphemlänge*/
 } tMorph;
 
 typedef struct {
-    int zustand;
-    tFx aktion;
+    int state;
+    tFunctionsIndex action;
 } entry;
 
-int initLex(char *fname);
+FILE* initLexer(char *fname);
 
-tMorph *Lex(void);
+tMorph *Lexer(void);
