@@ -1,3 +1,6 @@
+#ifndef LEXER_H
+#define LEXER_H
+
 // Funktionsindex *0x10, bzw. *16
 typedef enum T_Fx
 {
@@ -21,9 +24,9 @@ typedef enum T_MC
 typedef enum T_ZS
 {
     zNIL,
-    zResult = 128, // :=
-    zLessOrEqual,        // <=
-    zGreaterOrEqual,        // >=
+    zResult = 128,   // :=
+    zLessOrEqual,    // <=
+    zGreaterOrEqual, // >=
     zBegin,
     zCall,
     zConst,
@@ -59,3 +62,5 @@ typedef struct {
 FILE* initLexer(char *fname);
 
 tMorph *Lexer(void);
+
+#endif
