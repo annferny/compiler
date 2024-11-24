@@ -1,6 +1,9 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+#include <stdio.h>
+#include <stdlib.h>
+
 // Funktionsindex *0x10, bzw. *16
 typedef enum T_Fx
 {
