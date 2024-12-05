@@ -4,6 +4,7 @@
 typedef unsigned long ul;
 extern tMorph Morph;
 
+
 tBog gStatement[], gBlock[], gTerm[], gFactor[], gCondition[], gProgramm[];
 
 tBog gProgramm[] =
@@ -71,9 +72,9 @@ tBog gStatement[] =
         /* 8*/ {BgGr, {.G = gCondition}, NULL, 9, 0},              /*(8)---condition---->(9)*/
         /* 9*/ {BgSy, {(ul)zDo}, NULL, 10, 0},                      /*(7)---'while'------>(8)*/
         /*10*/ {BgGr, {.G = gStatement}, NULL, 21, 0},             /*(10)--statement--->(20)*/
-        /*11*/ {BgSy, {(ul)zBegin}, NULL, 12, 14},                 /*(11)--'begin'----->(12)*/
+        /*11*/ {BgSy, {(ul)zBegin}, NULL, 12, 15},                 /*(11)--'begin'----->(12)*/
         /*12*/ {BgGr, {.G = gStatement}, NULL, 13, 0},             /*(12)--statement--->(13)*/
-        /*13*/ {BgSy, {.S = ';'}, NULL, 12, 21},                   /*(13)--'*'--------->(12)*/
+        /*13*/ {BgSy, {.S = ';'}, NULL, 12, 14},                   /*(13)--'*'--------->(12)*/
 
         /*14*/ {BgSy, {(ul)zEnd}, NULL, 21, 0},                    /*(14)--'end'----->(15)*/  
 
@@ -81,7 +82,7 @@ tBog gStatement[] =
         /*16*/ {BgMo, {.M = morphemeCodeIdentifier}, NULL, 21, 0}, /*(15)--ident------->(20)*/
         /*17*/ {BgSy, {.S = '?'}, NULL, 18, 19},                   /*(16)--'?'--------->(17)*/
         /*18*/ {BgMo, {.M = morphemeCodeIdentifier}, NULL, 21, 0}, /*(17)--ident------->(20)*/
-        /*19*/ {BgSy, {.S = '!'}, NULL, 20, 0},                    /*(18)--'!'--------->(19)*/
+        /*19*/ {BgSy, {.S = '!'}, NULL, 20, 21},                    /*(18)--'!'--------->(19)*/
         /*20*/ {BgGr, {.G = gExpression}, NULL, 21, 0},            /*(19)--express----->(20)*/
         /*21*/ {BgEn, {.S = 0}, NULL, 0, 0}                        /*(E)---(ENDE)-----------*/
 };
@@ -114,20 +115,19 @@ tBog gCondition[] =
 int pars(tBog *pGraph)
 {
     tBog *pBog = pGraph;
+    char *bogenName;
     int succ = 0;
-    if (Morph.morphemeCode == morphemeCodeEmpty)
-        Lexer();
-    printf("pars call\n");  
-    if(pGraph == gProgramm) printf("gProgramm\n");
-    if(pGraph == gStatement) printf("gStatement\n");
-    if(pGraph == gBlock) printf("gBlock\n");
-    if(pGraph == gTerm) printf("gTerm\n");
-    if(pGraph == gFactor) printf("gFactor\n");
-    if(pGraph == gCondition) printf("gCondition\n");
-    if(pGraph == gExpression) printf("gExpression\n");
+    if (Morph.morphemeCode == morphemeCodeEmpty) Lexer();
+    if(pGraph == gProgramm) bogenName = "gProgramm";
+    if(pGraph == gStatement) bogenName = "gStatement";
+    if(pGraph == gBlock) bogenName = "gBlock";
+    if(pGraph == gTerm) bogenName = "gTerm";
+    if(pGraph == gFactor) bogenName = "gFactor";
+    if(pGraph == gCondition) bogenName = "gCondition";
+    if(pGraph == gExpression) bogenName = "gExpression";
     while (1)
     {
-      printf("in pars loop %d %d\n", pBog->iNext, pBog->iAlt);  
+      printf("in pars loop of %s %d %d\n", bogenName, pBog->iNext, pBog->iAlt);
         switch (pBog->BgD)
         {
         case BgNl:
@@ -143,14 +143,13 @@ int pars(tBog *pGraph)
             succ = pars(pBog->BgX.G);
             break;
         case BgEn:
-            if(pGraph == gProgramm) printf("gProgramm\n");
-            if(pGraph == gStatement) printf("gStatement\n");
-            if(pGraph == gBlock) printf("gBlock\n");
-            if(pGraph == gTerm) printf("gTerm\n");
-            if(pGraph == gFactor) printf("gFactor\n");
-            if(pGraph == gCondition) printf("gCondition\n");
-            if(pGraph == gExpression) printf("gExpression\n");
-            printf("return\n");
+            if(pGraph == gProgramm) printf("return: gProgramm\n");
+            if(pGraph == gStatement) printf("return: gStatement\n");
+            if(pGraph == gBlock) printf("return: gBlock\n");
+            if(pGraph == gTerm) printf("return: gTerm\n");
+            if(pGraph == gFactor) printf("return: gFactor\n");
+            if(pGraph == gCondition) printf("return: gCondition\n");
+            if(pGraph == gExpression) printf("return: gExpression\n");
             return 1; /* Ende erreichet - Erfolg */
         }
         if (succ && pBog->fx != NULL)
@@ -159,15 +158,15 @@ int pars(tBog *pGraph)
             if (pBog->iAlt != 0)
                 pBog = pGraph + pBog->iAlt;
             else {
-                if(pGraph == gProgramm) printf("gProgramm\n");
-                if(pGraph == gStatement) printf("gStatement\n");
-                if(pGraph == gBlock) printf("gBlock\n");
-                if(pGraph == gTerm) printf("gTerm\n");
-                if(pGraph == gFactor) printf("gFactor\n");
-                if(pGraph == gCondition) printf("gCondition\n");
-                if(pGraph == gExpression) printf("gExpression\n");
-                printf("return fail\n");
-                return 0; // FAIL
+                if(pGraph == gProgramm) printf("return fail: gProgramm\n");
+                if(pGraph == gStatement) printf("return fail: gStatement\n");
+                if(pGraph == gBlock) printf("return fail: gBlock\n");
+                if(pGraph == gTerm) printf("return fail: gTerm\n");
+                if(pGraph == gFactor) printf("return fail: gFactor\n");
+                if(pGraph == gCondition) printf("return fail: gCondition\n");
+                if(pGraph == gExpression) printf("return fail: gExpression\n");
+                printf("Syntax ERROR at line: %d, column: %d\n", Morph.positionOfLine, Morph.positionOfColumn);
+                exit(-1); // FAIL
             }
         else /* Morphem formal akzeptiert (eaten) */
         {

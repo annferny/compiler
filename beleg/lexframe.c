@@ -1,4 +1,3 @@
-
 #include <string.h>
 #include <ctype.h>
 #include "lex.h"
@@ -9,13 +8,13 @@ tMorph Morph;
 static int actualInputSymbol; /* Aktuelles Eingabezeichen 		*/
 static int actualStateOfAutomat; /* Aktueller Zustand des Automaten 	*/
 static char vBuf[128 + 1], *pBuf; /* Ausgabepuffer */
-static int line, column; // Zeile und Spalte
+static int line=1, column=0; // Zeile und Spalte
 static int endFlag; /* Flag 				*/
 
 char *keyWords[] = {"BEGIN", "CALL", "CONST", "DO", "END", "IF", "ODD", "PROCEDURE", "THEN", "VAR", "WHILE"};
 
 /*---- Initialisierung der lexiaklischen Analyse ----*/
-FILE* initLexer(char *fname) {
+FILE *initLexer(char *fname) {
     pointedFile = fopen(fname, "r+t");
     if (pointedFile)
         actualInputSymbol = fgetc(pointedFile);
@@ -36,22 +35,28 @@ static char characterClassVector[128] =
             /*40*/ 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, /*40*/
             /*50*/ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, /*50*/
             /*60*/ 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, /*60*/
-            /*70*/ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 7  /*70*/
+            /*70*/ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 7 /*70*/
         };
 
 /* Automatentabelle */
 
 static entry automatTable[][8] =
 {
-    {{9, ifWriteReadEnd}, {1, ifWriteRead}, {2, ifWriteAsCapitalLetters}, {3, ifWriteRead}, {9, ifWriteReadEnd}, {4, ifWriteRead}, {5, ifWriteRead}, {0, ifRead}},
-    {{9, ifEnd},          {1, ifWriteRead}, {9, ifEnd},                   {9, ifEnd},       {9, ifEnd},          {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
-    {{9, ifEnd},          {2, ifWriteRead}, {2, ifWriteAsCapitalLetters}, {9, ifEnd},       {9, ifEnd},          {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
-    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {6, ifWriteRead},    {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
-    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {7, ifWriteRead},    {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
-    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {8, ifWriteRead},    {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
-    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {9, ifEnd},          {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
-    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {9, ifEnd},          {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
-    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {9, ifEnd},          {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},
+    {
+        {9, ifWriteReadEnd}, {1, ifWriteRead}, {2, ifWriteAsCapitalLetters}, {3, ifWriteRead}, {9, ifWriteReadEnd},
+        {4, ifWriteRead}, {5, ifWriteRead}, {0, ifRead}
+    },
+    {{9, ifEnd}, {1, ifWriteRead}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}},
+    {
+        {9, ifEnd}, {2, ifWriteRead}, {2, ifWriteAsCapitalLetters}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd},
+        {9, ifEnd}
+    },
+    {{9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {6, ifWriteRead}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}},
+    {{9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {7, ifWriteRead}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}},
+    {{9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {8, ifWriteRead}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}},
+    {{9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}},
+    {{9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}},
+    {{9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}},
 };
 
 /* Ausgabefunktionen des Automaten */
@@ -89,7 +94,8 @@ tMorph *Lexer(void) {
         /* Berechnung des Folgezustands */
         const int nextState = automatTable[actualStateOfAutomat][characterClassVector[actualInputSymbol & 0x7f]].state;
         /* Ausfuehrung der Aktion (Ausgabefunktion */
-        vectorPointersToFunctions[automatTable[actualStateOfAutomat][characterClassVector[actualInputSymbol & 0x7f]].action]();
+        vectorPointersToFunctions[automatTable[actualStateOfAutomat][characterClassVector[actualInputSymbol & 0x7f]].
+            action]();
         /* Automat schaltet */
         actualStateOfAutomat = nextState;
         // printf("neuer Zustand: %d\n", Z);
@@ -130,6 +136,8 @@ static void end() {
     int i;
     const size_t numKeywords = sizeof(keyWords) / sizeof(keyWords[0]);
     printf("Morph %s\n", vBuf);
+    Morph.positionOfColumn = column;
+    Morph.positionOfLine = line;
     switch (actualStateOfAutomat) {
         /* Symbol */
         case 0: // other symbols
