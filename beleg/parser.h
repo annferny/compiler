@@ -29,4 +29,6 @@ typedef struct BOGEN
     // Alternativbogen gibt.
 } tBog;
 
+int pars(tBog* pGraph);
+
 #endif

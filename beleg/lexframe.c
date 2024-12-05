@@ -129,7 +129,7 @@ static void writeReadEnd(void) {
 static void end() {
     int i;
     const size_t numKeywords = sizeof(keyWords) / sizeof(keyWords[0]);
-
+    printf("Morph %s\n", vBuf);
     switch (actualStateOfAutomat) {
         /* Symbol */
         case 0: // other symbols

@@ -4,9 +4,11 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+#include "parser.h"
 #include "lex.h"
 
- extern tMorph Morph;
+extern tMorph Morph;
+extern tBog gProgramm[];
 
 int main(int argc, void *argv[])
 {
@@ -17,6 +19,7 @@ int main(int argc, void *argv[])
 
    
     initLexer(argv[1]);
+    /*
     do
     {
         Lexer();
@@ -68,6 +71,14 @@ int main(int argc, void *argv[])
         //getchar();
     } while (!(Morph.morphemeCode == morphemeCodeSymbol && Morph.Value.symbol == -1));
 
-    puts("");
+*/
+    puts("test");
+
+    int x = pars(gProgramm);
+    printf("X %d \n", x);
+    if (x == 0) {
+        printf("Line %4d, Col %3d: \n", Morph.positionOfLine, Morph.positionOfColumn);
+    }
+
     return 0;
 }
