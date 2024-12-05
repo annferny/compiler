@@ -69,7 +69,7 @@ tBog gStatement[] =
         /* 6*/ {BgGr, {.G = gStatement}, NULL, 21, 0},             /*(6)---statement--->(20)*/
         /* 7*/ {BgSy, {(ul)zWhile}, NULL, 8, 11},                  /*(7)---'while'------>(8)*/
         /* 8*/ {BgGr, {.G = gCondition}, NULL, 9, 0},              /*(8)---condition---->(9)*/
-        /* 9*/ {BgSy, {(ul)zDo}, NULL, 8, 0},                      /*(7)---'while'------>(8)*/
+        /* 9*/ {BgSy, {(ul)zDo}, NULL, 10, 0},                      /*(7)---'while'------>(8)*/
         /*10*/ {BgGr, {.G = gStatement}, NULL, 21, 0},             /*(10)--statement--->(20)*/
         /*11*/ {BgSy, {(ul)zBegin}, NULL, 12, 14},                 /*(11)--'begin'----->(12)*/
         /*12*/ {BgGr, {.G = gStatement}, NULL, 13, 0},             /*(12)--statement--->(13)*/
