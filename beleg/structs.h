@@ -7,6 +7,8 @@ s85499
 #ifndef STRUCTS_H_
 #define STRUCTS_H_
 
+#include <stdint.h>
+
 /*--------------------------------------------------------------------------------------*/
 
 // Struct of one element of the list
@@ -26,7 +28,6 @@ typedef struct
     tKennzeichen kennzeichen; // tKz Kz; 
     short indexProcedure; // idxProc;
     void* pointerObject; //pObj;
-    int lenth;   //len;
     char* pointerName; // pName;
 } tIdentifier; // tBez
 
@@ -34,9 +35,10 @@ typedef struct tPROCEDURE //tPROC
 {
     tKennzeichen kennzeichen;		/* Kennzeichen tKz    Kz; */
     short  indexProcedure;	/* Prozedurindex short  IdxProc; */
-    struct tPROC* pointerParent;	/* Zeiger auf umgebende Prozedur  struct tPROC*pParent;*/
+    struct tPROCEDURE* pointerParent;	/* Zeiger auf umgebende Prozedur  struct tPROC*pParent;*/
     List* pListIdentifier;    	/* Namensliste  tList *pLBez;   */
 }tProcedure; //tProc;
+
 
 typedef struct tCONST
 {
@@ -73,3 +75,4 @@ typedef struct structList
 } List;
 
 #endif /* STRUCTS_H_ */
+

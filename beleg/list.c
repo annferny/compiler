@@ -52,6 +52,12 @@ int insertBefore (List* listOfElements, void *itemToInsert)
     return insertConnector(listOfElements->currentPosition->previous, itemToInsert);
 }
 
+// The following function inserts data before the current list item
+int insertHead (List* listOfElements, void *itemToInsert)
+{
+  	getFirst(listOfElements);
+    return insertBefore(listOfElements, itemToInsert);
+}
 
 // The following function gets the first element of the list
 void* getFirst (List* listOfElements)
