@@ -9,10 +9,6 @@ s85499
 
 /*--------------------------------------------------------------------------------------*/
 
-// Struct of one article
-struct articles;
-typedef struct articles art;
-
 // Struct of one element of the list
 struct connectElements;
 typedef struct connectElements connector;
@@ -21,15 +17,45 @@ typedef struct connectElements connector;
 struct structList;
 typedef struct structList List;
 
+typedef enum {KzIdentifier,KzProcedure,KzConst,KzVar,KzLable} tKennzeichen; // typedef enum tKZ{KzBez,KzPrc,KzConst,KzVar,KzLabl}tKz;
+
 /*--------------------------------------------------------------------------------------*/
 
-// Struct of one article
-typedef struct articles
+typedef struct
 {
-    int articleNumber;
-    char* description;
-    int amount;
-}art;
+    tKennzeichen kennzeichen; // tKz Kz; 
+    short indexProcedure; // idxProc;
+    void* pointerObject; //pObj;
+    int lenth;   //len;
+    char* pointerName; // pName;
+} tIdentifier; // tBez
+
+typedef struct tPROCEDURE //tPROC
+{
+    tKennzeichen kennzeichen;		/* Kennzeichen tKz    Kz; */
+    short  indexProcedure;	/* Prozedurindex short  IdxProc; */
+    struct tPROC* pointerParent;	/* Zeiger auf umgebende Prozedur  struct tPROC*pParent;*/
+    List* pListIdentifier;    	/* Namensliste  tList *pLBez;   */
+}tProcedure; //tProc;
+
+typedef struct tCONST
+{
+    tKennzeichen kennzeichen; //tKz  Kz;		/* Kennzeichen */
+    long value; //long Val;		/* Wert der Konstanten*/
+    int index; //int  Idx;		/* Index im Konstantenblock */
+} tConst;
+
+typedef struct tVAR
+{
+    tKennzeichen kennzeichen; //tKz Kz;		/* Kennzeichen */
+    int relativeAddress; //int Dspl;		/* Relativadresse der Variablen */
+} tVar;
+
+typedef struct tLABL
+{
+    tKennzeichen kennzeichen; //tKz Kz;		/* Kennzeichen */
+    long indexJump; //long iJmp;		/* Pointer in Codeausgabebereich */
+}tLabl;
 
 // Struct of one element of the list
 typedef struct connectElements

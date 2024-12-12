@@ -1,4 +1,4 @@
-var a,fac;
+var a ,fac;
 
 Procedure p1;
  var b,c;
@@ -16,5 +16,5 @@ begin
   ?a;
   fac := 1;
   call p1;
-  !fac
+  !fac;
 end.

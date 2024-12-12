@@ -52,6 +52,7 @@ int insertBefore (List* listOfElements, void *itemToInsert)
     return insertConnector(listOfElements->currentPosition->previous, itemToInsert);
 }
 
+
 // The following function gets the first element of the list
 void* getFirst (List* listOfElements)
 {
@@ -85,7 +86,7 @@ int removeItem (List* listOfElements)
     // Creates a temporary connector for saving the current position
     connector * tmp = listOfElements->currentPosition;
 
-    art* descr = tmp->pointedItem; // pointer to data
+    tIdentifier* descr = tmp->pointedItem; // pointer to data
     
     // Changes pointers of surrounding connectors so, that they point to each other, and no longer to the current connector
     listOfElements->currentPosition = tmp->next;
@@ -101,10 +102,8 @@ int removeItem (List* listOfElements)
         listOfElements->head.previous = tmp->previous;
     }
 
-    free (descr->description); // free memory for description of article
-    // descr->description = NULL;
-    // free(descr);
-    // descr = NULL;
+    free (descr->pointerObject); // free memory for pointed object
+    free (descr->pointerName);
     free(tmp);
     tmp = NULL;
     return OK;
@@ -113,7 +112,7 @@ int removeItem (List* listOfElements)
 // The following function deletes the whole list
 int deleteList (List* listOfElements)
 {
-    for (art* item = getFirst(listOfElements); item != NULL; item = getNext(listOfElements))
+    for (tIdentifier* item = getFirst(listOfElements); item != NULL; item = getNext(listOfElements))
     {
         if(listOfElements->currentPosition->next != listOfElements->currentPosition) // while pointers of current and next connectors are not equal 
         {
@@ -129,8 +128,8 @@ int deleteList (List* listOfElements)
 // 1 - article number from the list is larger than the new one
 // 0 - article numbers are equal
 // -1 - article number from the list is less than the new one
-
-int compare(art* itemFromList, art* newElement)
+/*
+int compare(tIdentifier* itemFromList, tIdentifier* newElement)
 {
     if (itemFromList->articleNumber == newElement->articleNumber)
     {
@@ -143,13 +142,14 @@ int compare(art* itemFromList, art* newElement)
         return -1;
     }
 }
+*/
 
 // The following function adds a new item according to its article number in sorted order. 
 // If the gotten article number already exists, then increases its amount.
-
-void* addArticleToList (List* listOfElements, art* newElement, int(*compare)(art*,art*))
+/*
+void* addArticleToList (List* listOfElements, tIdentifier* newElement, int(*compare)(tIdentifier*,tIdentifier*))
 {
-    art* itemFromList;
+    tIdentifier* itemFromList;
     int i = 0;
 
     // Looping the list untill the gotten item is larger than the item from the list
@@ -196,11 +196,13 @@ void* addArticleToList (List* listOfElements, art* newElement, int(*compare)(art
         }
     }
 }
+*/
 
+/*
 // The following function reduces the amount of articles in the list.
-void* reduceArticle (List* listOfElements, art* newElement, int(*compare)(art*,art*))
+void* reduceArticle (List* listOfElements, tIdentifier* newElement, int(*compare)(tIdentifier*,tIdentifier*))
 {
-    art* itemFromList;
+    tIdentifier* itemFromList;
 
     // Looping the list untill the gotten item is larger than the item from the list
     for(itemFromList = getFirst(listOfElements); itemFromList != NULL && compare(itemFromList, newElement) != 0; itemFromList = getNext(listOfElements));
@@ -235,3 +237,4 @@ void* reduceArticle (List* listOfElements, art* newElement, int(*compare)(art*,a
         }
     }
 }
+*/

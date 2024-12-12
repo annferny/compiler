@@ -72,13 +72,9 @@ int main(int argc, void *argv[])
     } while (!(Morph.morphemeCode == morphemeCodeSymbol && Morph.Value.symbol == -1));
 
 */
-    puts("test");
 
     int x = pars(gProgramm);
-    printf("X %d \n", x);
-    if (x == 0) {
-        printf("Line %4d, Col %3d: \n", Morph.positionOfLine, Morph.positionOfColumn);
-    }
+    printf("Successfully parsed\n");
 
     return 0;
 }
