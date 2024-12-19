@@ -37,7 +37,8 @@ typedef struct tPROCEDURE //tPROC
     short  indexProcedure;	/* Prozedurindex short  IdxProc; */
     struct tPROCEDURE* pointerParent;	/* Zeiger auf umgebende Prozedur  struct tPROC*pParent;*/
     List* pListIdentifier;    	/* Namensliste  tList *pLBez;   */
-}tProcedure; //tProc;
+    int lengthVar;
+} tProcedure; //tProc;
 
 
 typedef struct tCONST
@@ -57,7 +58,7 @@ typedef struct tLABL
 {
     tKennzeichen kennzeichen; //tKz Kz;		/* Kennzeichen */
     long indexJump; //long iJmp;		/* Pointer in Codeausgabebereich */
-}tLabl;
+} tLabl;
 
 // Struct of one element of the list
 typedef struct connectElements
@@ -65,13 +66,14 @@ typedef struct connectElements
     struct connectElements *next; // pointer on the next element
     struct connectElements *previous; // pointer on the previous element
     void *pointedItem; // pointer on data
-}connector;
+} connector;
 
 // Struct of a circle list
 typedef struct structList
 {
     connector head;
     connector*currentPosition;
+    int listLength;
 } List;
 
 #endif /* STRUCTS_H_ */

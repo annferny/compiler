@@ -6,9 +6,11 @@
 
 #include "parser.h"
 #include "lex.h"
+#include "namelist.h"
 
 extern tMorph Morph;
 extern tBog gProgramm[];
+extern List* constList;
 
 int main(int argc, void *argv[])
 {
@@ -19,6 +21,21 @@ int main(int argc, void *argv[])
 
    
     initLexer(argv[1]);
+
+    tProcedure* mainProcedure = createProcedure(NULL);
+    constList = createList();
+
+    tConst* exampleConst = createConst(2);
+    insertHead(constList, exampleConst);
+    insertTail(constList, createConst(3));
+
+    tConst* searchedConst = searchConst(4);
+    if (searchedConst == NULL) {
+        printf("unsuccess\n");
+    } else {
+        printf("const: %ld\n",searchedConst->value);
+    }
+
     /*
     do
     {
@@ -73,8 +90,10 @@ int main(int argc, void *argv[])
 
 */
 
-    int x = pars(gProgramm);
+    // int x = pars(gProgramm);
     printf("Successfully parsed\n");
+
+    deleteList(constList);
 
     return 0;
 }

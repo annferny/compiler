@@ -21,6 +21,7 @@ List* createList()
         listOfElements->head.next = (connector*)listOfElements;
         listOfElements->head.previous = (connector*)listOfElements;
         listOfElements->head.pointedItem = NULL;
+        listOfElements->listLength = 0;
     }
 }
 
@@ -43,12 +44,14 @@ int insertConnector(connector*previousConnector, void*itemToInsert)
 // The following function inserts data at the end of the list
 int insertTail (List* listOfElements, void *itemToInsert)
 {
+    listOfElements->listLength++;
     return insertConnector(listOfElements->head.previous, itemToInsert);
 }
 
 // The following function inserts data before the current list item
 int insertBefore (List* listOfElements, void *itemToInsert)
 {
+    listOfElements->listLength++;
     return insertConnector(listOfElements->currentPosition->previous, itemToInsert);
 }
 
@@ -56,6 +59,7 @@ int insertBefore (List* listOfElements, void *itemToInsert)
 int insertHead (List* listOfElements, void *itemToInsert)
 {
   	getFirst(listOfElements);
+    listOfElements->listLength++;
     return insertBefore(listOfElements, itemToInsert);
 }
 
@@ -89,10 +93,11 @@ void* getNext (List* listOfElements)
 // The following function deletes an item on the current position
 int removeItem (List* listOfElements)
 {
+    listOfElements->listLength--;
     // Creates a temporary connector for saving the current position
     connector * tmp = listOfElements->currentPosition;
 
-    tIdentifier* descr = tmp->pointedItem; // pointer to data
+    void* descr = tmp->pointedItem; // pointer to data
     
     // Changes pointers of surrounding connectors so, that they point to each other, and no longer to the current connector
     listOfElements->currentPosition = tmp->next;
@@ -107,9 +112,6 @@ int removeItem (List* listOfElements)
     {
         listOfElements->head.previous = tmp->previous;
     }
-
-    free (descr->pointerObject); // free memory for pointed object
-    free (descr->pointerName);
     free(tmp);
     tmp = NULL;
     return OK;
