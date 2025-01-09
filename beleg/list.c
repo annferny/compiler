@@ -89,6 +89,17 @@ void* getNext (List* listOfElements)
     return tmp;
 }
 
+// The folliwing function gets the next item from the list
+void* getCurrentItem (List* listOfElements)
+{
+    void* tmp = NULL;
+    if (listOfElements->currentPosition)
+    {
+        tmp = listOfElements->currentPosition->pointedItem;
+    }
+    return tmp;
+}
+
 // The following function deletes an item on the current position
 int removeItem (List* listOfElements)
 {

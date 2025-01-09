@@ -8,7 +8,7 @@
 
 List* constList;
 tProcedure* currProcedure;
-int numProc = 0;
+short numProc = 0;
 
 // TODO: probably add an update for the current procedure
 tIdentifier *createIdentifier(char *pIdentifier)
@@ -42,7 +42,6 @@ tProcedure *createProcedure(tProcedure *pParent)
     procedure->kennzeichen = KzProcedure;
 
     procedure->indexProcedure = numProc++;
-    printf("bla %d %d\n", procedure->indexProcedure, numProc);
     
     procedure->pointerParent = pParent;
     procedure->lengthVar = 0;
@@ -56,33 +55,52 @@ tConst* searchConst(int32_t Val)
     
     for (int i = 0; i < constList->listLength; i++) {
         if (temp->value == Val) return temp;
-        else temp = getNext(constList);
+        temp = getNext(constList);
     }
     return NULL;
 }
 
-tIdentifier* searchIdentifier(tProcedure* pProcedure, char* pIdentifier) {
+tIdentifier* searchIdentifierLocal(tProcedure* pProcedure, char* pIdentifier) {
     tIdentifier* temp = getFirst(pProcedure->pListIdentifier);
     
     for (int i = 0; i < pProcedure->pListIdentifier->listLength; i++) {
         if (temp->pointerName == pIdentifier) return temp;
-        else temp = getNext(pProcedure->pListIdentifier);
+        temp = getNext(pProcedure->pListIdentifier);
     }
     return NULL;
 }
 
 tIdentifier* searchIdentifierGlobal(char* pIdentifier){
     tProcedure *tempProcedure = currProcedure;
-    tIdentifier *tempIdentifier;
     while (tempProcedure->indexProcedure >= 0)
     {
-        tempIdentifier = searchIdentifier(tempProcedure, pIdentifier);
+        tIdentifier *tempIdentifier = searchIdentifierLocal(tempProcedure, pIdentifier);
         if (tempIdentifier != NULL) {
-            printf("Found in proc nr.: %d\n", tempProcedure->indexProcedure);
+            printf("%s found in proc nr.: %d\n", pIdentifier, tempProcedure->indexProcedure);
             return tempIdentifier;
-        } 
-        else tempProcedure = tempProcedure->pointerParent;
+        }
         if (tempProcedure->indexProcedure == 0) break;
+        tempProcedure = tempProcedure->pointerParent;
     }
     return NULL;
+}
+
+void addConstIdentifier(char* pIdentifier) { // bl1
+    if (searchIdentifierLocal(currProcedure, pIdentifier) != NULL) {
+        printf("Identifier \"%s\" already exists in proc nr.: %d\n", pIdentifier, currProcedure->indexProcedure);
+        exit(-1);
+    }
+
+    tIdentifier* constIdentifier = createIdentifier(pIdentifier);
+    insertHead(currProcedure->pListIdentifier, constIdentifier);
+}
+
+void addConstToIdentifier(int32_t value) { // bl2
+    tConst* temp = searchConst(value);
+    if (temp == NULL) {
+        temp = createConst(value);
+        insertHead(constList, temp);
+    }
+    tIdentifier *constIdentifier = getFirst(currProcedure->pListIdentifier);
+    constIdentifier->pointerObject = temp;
 }

@@ -26,6 +26,7 @@ int insertHead (List* listOfElements, void *itemToInsert);
 
 void* getFirst(List* pointedList); // gets the first item
 void* getNext(List* pointedList); // gets the next item
+void* getCurrentItem (List* listOfElements); // gets the current item
 
 int removeItem(List* pointedList); // removes an item from the list
 int deleteList(List* pointedList); // deletes list

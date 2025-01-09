@@ -20,22 +20,33 @@ int main(int argc, void *argv[])
         printf("Error: enter file name\n");
         exit(-1);
     }
-
    
     initLexer(argv[1]);
 
     tProcedure* mainProcedure = createProcedure(NULL);
     currProcedure = mainProcedure;
-    printf("current proc nr: %d\n", currProcedure->indexProcedure);
     constList = createList();
+
+    tIdentifier* identifierVarGlob = createIdentifier("var2");
+    tVar *pVGlob = createVar(currProcedure->lengthVar);
+    pVGlob->relativeAddress = currProcedure->lengthVar;
+    currProcedure->lengthVar +=4;
+    identifierVarGlob->pointerObject = pVGlob;
+    insertHead(currProcedure->pListIdentifier, identifierVarGlob);
+
+    addConstIdentifier("const1");
+    addConstToIdentifier(3);
+    tIdentifier* constIdentifier1 = searchIdentifierLocal(currProcedure, "const1");
+    tConst* const1 = constIdentifier1->pointerObject;
+
+    if (const1 != NULL) {
+        printf("Found %s = %d in proc: %d\n", constIdentifier1->pointerName, const1->value, currProcedure->indexProcedure);
+    }
 
     tIdentifier* identifierProc = createIdentifier("proc1");
     insertHead(currProcedure->pListIdentifier, identifierProc);
     tProcedure* proc1 = createProcedure(currProcedure);
     currProcedure = proc1;
-    printf("current proc nr: %d\n", currProcedure->indexProcedure);
-
-    printf("proc1 nr: %d\n", proc1->indexProcedure);
 
     tIdentifier* identifier = createIdentifier("var1");
     tVar *pV = createVar(currProcedure->lengthVar);
@@ -44,11 +55,32 @@ int main(int argc, void *argv[])
     identifier->pointerObject = pV;
     insertHead(currProcedure->pListIdentifier, identifier);
 
-    tIdentifier *searchedIdentifier = searchIdentifierGlobal("var1");
+    tIdentifier *searchedIdentifier = searchIdentifierGlobal("var2");
     if (searchedIdentifier != NULL) {
         printf("Found: %s\n", searchedIdentifier->pointerName);
     } else {
-        printf("unsuccsess\n");
+        printf("unsuccessful\n");
+    }
+
+    addConstIdentifier("const2");
+    addConstToIdentifier(3);
+    tIdentifier* constIdentifier2 = searchIdentifierLocal(currProcedure, "const2");
+    tConst* const2 = constIdentifier1->pointerObject;
+
+
+    // TODO: check the function getNext. Seems not to work
+    if (const2 != NULL) {
+        printf("Found %s = %d in proc: %d\n", constIdentifier2->pointerName, const2->value, currProcedure->indexProcedure);
+        printf("%d\n", constList->listLength);
+        for (int i = 0; i < constList->listLength; i++) {
+            printf("bla\n");
+            tConst* item = getCurrentItem(constList);
+            printf("bla\n");
+            if (item == NULL) {
+                printf("bla\n");
+            }
+            printf("Const block elements: %d\n", item->value);
+        }
     }
 
     /*

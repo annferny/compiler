@@ -13,8 +13,10 @@ tConst* createConst(int32_t val);
 tConst* searchConst(int32_t Val);
 tVar* createVar(int relativeAddress);
 tProcedure* createProcedure(tProcedure* pParent);
-tIdentifier* searchIdentifier(tProcedure* pProcedure,char* pIdentifier);
+tIdentifier* searchIdentifierLocal(tProcedure* pProcedure,char* pIdentifier);
 tIdentifier* searchIdentifierGlobal(char* pIdentifier);
+void addConstIdentifier(char* pIdentifier);
+void addConstToIdentifier(int32_t value);
 
 #endif //NAMELIST_H
 
