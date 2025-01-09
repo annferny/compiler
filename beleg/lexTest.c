@@ -12,6 +12,8 @@ extern tMorph Morph;
 extern tBog gProgramm[];
 extern List* constList;
 
+extern tProcedure* currProcedure;
+
 int main(int argc, void *argv[])
 {
     if (argc != 2) {
@@ -23,17 +25,30 @@ int main(int argc, void *argv[])
     initLexer(argv[1]);
 
     tProcedure* mainProcedure = createProcedure(NULL);
+    currProcedure = mainProcedure;
+    printf("current proc nr: %d\n", currProcedure->indexProcedure);
     constList = createList();
 
-    tConst* exampleConst = createConst(2);
-    insertHead(constList, exampleConst);
-    insertTail(constList, createConst(3));
+    tIdentifier* identifierProc = createIdentifier("proc1");
+    insertHead(currProcedure->pListIdentifier, identifierProc);
+    tProcedure* proc1 = createProcedure(currProcedure);
+    currProcedure = proc1;
+    printf("current proc nr: %d\n", currProcedure->indexProcedure);
 
-    tConst* searchedConst = searchConst(4);
-    if (searchedConst == NULL) {
-        printf("unsuccess\n");
+    printf("proc1 nr: %d\n", proc1->indexProcedure);
+
+    tIdentifier* identifier = createIdentifier("var1");
+    tVar *pV = createVar(currProcedure->lengthVar);
+    pV->relativeAddress = currProcedure->lengthVar;
+    currProcedure->lengthVar +=4;
+    identifier->pointerObject = pV;
+    insertHead(currProcedure->pListIdentifier, identifier);
+
+    tIdentifier *searchedIdentifier = searchIdentifierGlobal("var1");
+    if (searchedIdentifier != NULL) {
+        printf("Found: %s\n", searchedIdentifier->pointerName);
     } else {
-        printf("const: %ld\n",searchedConst->value);
+        printf("unsuccsess\n");
     }
 
     /*

@@ -59,7 +59,6 @@ int insertBefore (List* listOfElements, void *itemToInsert)
 int insertHead (List* listOfElements, void *itemToInsert)
 {
   	getFirst(listOfElements);
-    listOfElements->listLength++;
     return insertBefore(listOfElements, itemToInsert);
 }
 
