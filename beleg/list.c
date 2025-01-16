@@ -23,10 +23,11 @@ List* createList()
         listOfElements->head.pointedItem = NULL;
         listOfElements->listLength = 0;
     }
+    return listOfElements;
 }
 
 // The following function inserts a new connector behind the given one in arguments
-int insertConnector(connector*previousConnector, void*itemToInsert)
+int insertConnector(connector* previousConnector, void*itemToInsert)
 {
     connector* connectorToInsert = malloc(sizeof(connector));
     if (connectorToInsert)
@@ -81,9 +82,15 @@ void* getNext (List* listOfElements)
     if (listOfElements->currentPosition)
     {
         listOfElements->currentPosition = listOfElements->currentPosition->next;
+
+        // Check if we have reached the end of the list
+        if (listOfElements->currentPosition == (connector*)listOfElements || listOfElements->currentPosition == NULL) {
+            listOfElements->currentPosition = listOfElements->head.next; // Reset to first element
+        }
+
         if (listOfElements->currentPosition)
         {
-            tmp = listOfElements->currentPosition->pointedItem;
+          tmp = listOfElements->currentPosition->pointedItem;
         }
     }
     return tmp;

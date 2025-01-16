@@ -72,7 +72,7 @@ typedef struct connectElements
 typedef struct structList
 {
     connector head;
-    connector*currentPosition;
+    connector* currentPosition;
     int listLength;
 } List;
 

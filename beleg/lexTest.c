@@ -65,20 +65,16 @@ int main(int argc, void *argv[])
     addConstIdentifier("const2");
     addConstToIdentifier(3);
     tIdentifier* constIdentifier2 = searchIdentifierLocal(currProcedure, "const2");
-    tConst* const2 = constIdentifier1->pointerObject;
+    tConst* const2 = constIdentifier2->pointerObject;
 
+    tConst* const3 = createConst(4);
+    insertHead(constList, const3);
 
-    // TODO: check the function getNext. Seems not to work
     if (const2 != NULL) {
         printf("Found %s = %d in proc: %d\n", constIdentifier2->pointerName, const2->value, currProcedure->indexProcedure);
-        printf("%d\n", constList->listLength);
+        printf("Length of the list: %d\n", constList->listLength);
         for (int i = 0; i < constList->listLength; i++) {
-            printf("bla\n");
-            tConst* item = getCurrentItem(constList);
-            printf("bla\n");
-            if (item == NULL) {
-                printf("bla\n");
-            }
+            tConst* item = getNext(constList);
             printf("Const block elements: %d\n", item->value);
         }
     }
