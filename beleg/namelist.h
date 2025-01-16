@@ -17,6 +17,7 @@ tIdentifier* searchIdentifierLocal(tProcedure* pProcedure,char* pIdentifier);
 tIdentifier* searchIdentifierGlobal(char* pIdentifier);
 void addConstIdentifier(char* pIdentifier);
 void addConstToIdentifier(int32_t value);
+void addVarIdentifier(char* pIdentifier);
 
 #endif //NAMELIST_H
 
