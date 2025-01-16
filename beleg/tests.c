@@ -119,7 +119,7 @@ void testAddVariable() {
     // 4. Relative addresses are set correctly
 
     // Identifier and variable exist in the procedure 0
-    // Relative address of the variable is 0, of the procedure is 4
+    // Relative address of the variable is 0, of the procedure is 8
     printf("Test 1: \n");
     addVarIdentifier("var1");
     tIdentifier* identVar1 = searchIdentifierGlobal("var1");
@@ -129,7 +129,7 @@ void testAddVariable() {
     printf("Length of the list: %d\n", currProcedure->pListIdentifier->listLength);
 
     // Identifier and variable exist in the procedure 0
-    // Relative address of the variable is 4, of the procedure is 8
+    // Relative address of the variable is 8, of the procedure is 16
     printf("\nTest 2: \n");
     addVarIdentifier("var2");
     tIdentifier* identVar2 = searchIdentifierGlobal("var2");
@@ -139,7 +139,7 @@ void testAddVariable() {
     printf("Length of the list: %d\n", currProcedure->pListIdentifier->listLength);
 
     // Identifier and variable exist in the procedure 1
-    // Relative address of the variable is 0, of the procedure is 4
+    // Relative address of the variable is 0, of the procedure is 8
     printf("\nTest 3: \n");
     tProcedure* proc1 = createProcedure(currProcedure);
     currProcedure = proc1;

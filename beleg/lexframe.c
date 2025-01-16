@@ -2,7 +2,7 @@
 #include <ctype.h>
 #include "lex.h"
 
-static FILE *pointedFile; /* Quellfile 				*/
+FILE *pointedFile; /* Quellfile 				*/
 static tMorph MorphInit; /* Morphem   				*/
 tMorph Morph;
 static int actualInputSymbol; /* Aktuelles Eingabezeichen 		*/

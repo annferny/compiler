@@ -108,7 +108,7 @@ void addVarIdentifier(char *pIdentifier) {
     insertHead(currProcedure->pListIdentifier, identifier);
 
     tVar *variable = createVar(currProcedure->lengthVar);
-    currProcedure->lengthVar += 4;
+    currProcedure->lengthVar += 8;
 
     identifier->pointerObject = variable;
 }
