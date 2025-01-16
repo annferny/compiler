@@ -28,7 +28,7 @@ int main(int argc, void *argv[])
     currProcedure = mainProcedure;
     constList = createList();
 
-    testAddProcedure();
+    testEndProcedure();
 
     // int x = pars(gProgramm);
     printf("Successfully parsed\n");

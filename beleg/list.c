@@ -129,6 +129,7 @@ int removeItem (List* listOfElements)
     {
         listOfElements->head.previous = tmp->previous;
     }
+    free(tmp->pointedItem);
     free(tmp);
     tmp = NULL;
     return OK;

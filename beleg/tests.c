@@ -190,3 +190,27 @@ void testAddProcedure() {
     currProcedure = mainProcedure;
     addProcedureIdentifier("proc1");
 }
+
+
+void testEndProcedure() {
+    // To test:
+    // List is empty
+    // Identifiers are deleted
+
+    tProcedure* mainProcedure = currProcedure;
+
+    printf("Test 1: \n");
+    addProcedureIdentifier("proc1");
+    addVarIdentifier("var1");
+
+    endProcedure();
+
+    if (currProcedure == mainProcedure) {
+        printf("parent procedure is set correctly\n");
+    }
+
+    printf("Length of the list of the main procedure: %d\n", mainProcedure->pListIdentifier->listLength);
+    tIdentifier* ident = getFirst(mainProcedure->pListIdentifier);
+    tProcedure* proc1 = ident->pointerObject;
+    printf("Length of the list of the deleted procedure: %d\n", proc1->pListIdentifier->listLength);
+}

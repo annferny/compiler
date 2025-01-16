@@ -126,3 +126,8 @@ void addProcedureIdentifier(char* pIdentifier) { // bl4
     identifier->pointerObject = procedure;
     currProcedure = procedure;
 }
+
+void endProcedure() { // bl5
+    deleteList(currProcedure->pListIdentifier);
+    currProcedure = currProcedure->pointerParent;
+}

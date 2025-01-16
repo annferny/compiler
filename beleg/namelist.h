@@ -19,6 +19,7 @@ void addConstIdentifier(char* pIdentifier);
 void addConstToIdentifier(int32_t value);
 void addVarIdentifier(char* pIdentifier);
 void addProcedureIdentifier(char* pIdentifier);
+void endProcedure();
 
 #endif //NAMELIST_H
 

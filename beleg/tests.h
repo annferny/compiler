@@ -19,7 +19,7 @@ void testAddConst();
 void testLexer();
 void testAddVariable();
 void testAddProcedure();
-
+void testEndProcedure();
 
 
 #endif //TESTS_H
