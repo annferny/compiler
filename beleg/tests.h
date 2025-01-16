@@ -18,6 +18,7 @@ extern tProcedure* currProcedure;
 void testAddConst();
 void testLexer();
 void testAddVariable();
+void testAddProcedure();
 
 
 

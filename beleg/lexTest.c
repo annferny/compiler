@@ -25,10 +25,10 @@ int main(int argc, void *argv[])
     initLexer(argv[1]);
 
     tProcedure* mainProcedure = createProcedure(NULL);
-    // currProcedure = mainProcedure;
+    currProcedure = mainProcedure;
     constList = createList();
 
-    testAddVariable();
+    testAddProcedure();
 
     // int x = pars(gProgramm);
     printf("Successfully parsed\n");

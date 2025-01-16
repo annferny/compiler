@@ -141,7 +141,8 @@ void testAddVariable() {
     // Identifier and variable exist in the procedure 1
     // Relative address of the variable is 0, of the procedure is 4
     printf("\nTest 3: \n");
-    createProcedure(currProcedure);
+    tProcedure* proc1 = createProcedure(currProcedure);
+    currProcedure = proc1;
     addVarIdentifier("var3");
     tIdentifier* identVar3 = searchIdentifierGlobal("var3");
     tVar* var3 = identVar3->pointerObject;
@@ -162,4 +163,30 @@ void testAddVariable() {
     // Should throw error
     printf("\nTest 5: \n");
     addVarIdentifier("var1");
+}
+
+void testAddProcedure() {
+    // To test:
+    // 1. Procedure already exists
+    // 2. Procedures are correctly set
+
+    printf("Test 1: \n");
+    tProcedure* mainProcedure = currProcedure;
+    addProcedureIdentifier("proc1");
+    tIdentifier* identProc1 = searchIdentifierGlobal("proc1");
+    tProcedure* proc1 = identProc1->pointerObject;
+    printf("Found identifier %s with index: %d\n", identProc1->pointerName, proc1->indexProcedure);
+    if (proc1->pointerParent == mainProcedure) {
+        printf("parent procedure is set correctly\n");
+    }
+    if (currProcedure == proc1) {
+        printf("current procedure is set correctly\n");
+    }
+
+    printf("Length of the list of the main procedure: %d\n", mainProcedure->pListIdentifier->listLength);
+    printf("Length of the list of the new procedure: %d\n", proc1->pListIdentifier->listLength);
+
+    printf("\nTest 2: \n");
+    currProcedure = mainProcedure;
+    addProcedureIdentifier("proc1");
 }

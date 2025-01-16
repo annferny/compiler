@@ -32,7 +32,6 @@ tVar *createVar(int relativeAddress) {
     return var;
 }
 
-// TODO: probably add an update for the current procedure
 tProcedure *createProcedure(tProcedure *pParent) {
     tProcedure *procedure = malloc(sizeof(tProcedure));
     procedure->kennzeichen = KzProcedure;
@@ -42,7 +41,6 @@ tProcedure *createProcedure(tProcedure *pParent) {
     procedure->pointerParent = pParent;
     procedure->lengthVar = 0;
     procedure->pListIdentifier = createList();
-    currProcedure = procedure;
     return procedure;
 }
 
@@ -113,4 +111,18 @@ void addVarIdentifier(char *pIdentifier) {
     currProcedure->lengthVar += 4;
 
     identifier->pointerObject = variable;
+}
+
+void addProcedureIdentifier(char* pIdentifier) { // bl4
+    if (searchIdentifierLocal(currProcedure, pIdentifier) != NULL) {
+        printf("Identifier \"%s\" already exists in proc nr.: %d\n", pIdentifier, currProcedure->indexProcedure);
+        exit(-1);
+    }
+
+    tIdentifier *identifier = createIdentifier(pIdentifier);
+    insertHead(currProcedure->pListIdentifier, identifier);
+
+    tProcedure *procedure = createProcedure(currProcedure);
+    identifier->pointerObject = procedure;
+    currProcedure = procedure;
 }
