@@ -1,8 +1,12 @@
 #include "parser.h"
 #include <stdlib.h>
+#include "namelist.h"
 
 typedef unsigned long ul;
 extern tMorph Morph;
+char*  vCode;    /* Pointer auf dynamischen Bereich fuer Code */
+int    iCode;  
+int    LenCode;  /* Laenge des Codeausgabebereiches           */
 
 
 tBog gStatement[], gBlock[], gTerm[], gFactor[], gCondition[], gProgramm[];
@@ -10,7 +14,7 @@ tBog gStatement[], gBlock[], gTerm[], gFactor[], gCondition[], gProgramm[];
 tBog gProgramm[] =
     {
         /* 0*/ {BgGr, {.G = gBlock}, NULL, 1, 0}, /*(0)---block--->(1)*/ // NULL steht jetzt für zukunftige Funktionen
-        /* 1*/ {BgSy, {(ul)'.'}, NULL, 2, 0},                            /*(1)---'.'--->(E)*/
+        /* 1*/ {BgSy, {(ul)'.'}, pr1, 2, 0},                            /*(1)---'.'--->(E)*/
         /* 2*/ {BgEn, {(ul)0}, NULL, 0, 0}                               /*(E)--------(ENDE) */
 };
 
@@ -26,13 +30,14 @@ tBog gBlock[] =
         /* 7*/ {BgMo, {(ul)morphemeCodeIdentifier}, NULL, 8, 0},         /*(7)---ident---->(8)*/
         /* 8*/ {BgSy, {(ul)','}, NULL, 7, 9},                            /*(8)----','----->(7)*/
         /* 9*/ {BgSy, {(ul)';'}, NULL, 10, 0},                           /*(9)----';'----->(10)*/
-        /*10*/ {BgSy, {(ul)zProcedure}, NULL, 11, 15},                   /*(10)--'Var'---->(11)*/
+        /*10*/ {BgSy, {(ul)zProcedure}, NULL, 11, 17},                   /*(10)--'Var'---->(11)*/
         /*11*/ {BgMo, {(ul)morphemeCodeIdentifier}, NULL, 12, 0},        /*(11)---ident--->(12)*/
         /*12*/ {BgSy, {(ul)';'}, NULL, 13, 0},                           /*(12)----';'---->(13)*/
         /*13*/ {BgGr, {.G = gBlock}, NULL, 14, 0},                       /*(13)---block--->(14)*/
         /*14*/ {BgSy, {(ul)';'}, NULL, 10, 0},                           /*(14)----';'---->(10)*/
-        /*15*/ {BgGr, {.G = gStatement}, NULL, 16, 0},                   /*(15)---block--->(16)*/
-        /*16*/ {BgEn, {(ul)0}, NULL, 0, 0}                               /*(E)--------(ENDE) */
+        /*15*/ {BgGr, {.G = gStatement}, endProcedure, 16, 0},           /*(15)---block--->(16)*/
+        /*16*/ {BgEn, {(ul)0}, NULL, 0, 0},                              /*(E)--------(ENDE) */
+        /*17*/ {BgNl, {(ul)0}, bl6, 15, 0},                              /*(3)---Nil------>(4)*/
 };
 
 tBog gExpression[] =
@@ -82,7 +87,7 @@ tBog gStatement[] =
         /*16*/ {BgMo, {.M = morphemeCodeIdentifier}, NULL, 21, 0}, /*(15)--ident------->(20)*/
         /*17*/ {BgSy, {.S = '?'}, NULL, 18, 19},                   /*(16)--'?'--------->(17)*/
         /*18*/ {BgMo, {.M = morphemeCodeIdentifier}, NULL, 21, 0}, /*(17)--ident------->(20)*/
-        /*19*/ {BgSy, {.S = '!'}, NULL, 20, 21},                    /*(18)--'!'--------->(19)*/
+        /*19*/ {BgSy, {.S = '!'}, st10, 20, 21},                    /*(18)--'!'--------->(19)*/
         /*20*/ {BgGr, {.G = gExpression}, NULL, 21, 0},            /*(19)--express----->(20)*/
         /*21*/ {BgEn, {.S = 0}, NULL, 0, 0}                        /*(E)---(ENDE)-----------*/
 };
@@ -90,7 +95,7 @@ tBog gStatement[] =
 tBog gFactor[] =
     {
         /* 0*/ {BgMo, {(ul)morphemeCodeIdentifier}, NULL, 5, 1}, /*(0)---ident-------->(E)*/ // NULL steht jetzt für zukunftige Funktionen
-        /* 1*/ {BgMo, {(ul)morphemeCodeNumber}, NULL, 5, 2},                                 /* +---number-------->(E)*/
+        /* 1*/ {BgMo, {(ul)morphemeCodeNumber}, fa1, 5, 2},                                 /* +---number-------->(E)*/
         /* 2*/ {BgSy, {(ul)'('}, NULL, 3, 0},                                                /*(+)----'('--------->(3)*/
         /* 3*/ {BgGr, {.G = gExpression}, NULL, 4, 0},                                       /*(1)---express------>(4)*/
         /* 4*/ {BgSy, {(ul)')'}, NULL, 5, 0},                                                /*(0)----')'--------->(E)*/

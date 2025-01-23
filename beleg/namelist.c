@@ -3,12 +3,16 @@
 //
 
 #include "namelist.h"
+#include "CodeGen.h"
+#include "parser.h"
 
 #include <stdlib.h>
 
 List *constList;
 tProcedure *currProcedure;
 short numProc = 0;
+extern int LenCode;
+extern tMorph Morph;
 
 // TODO: probably add an update for the current procedure
 tIdentifier *createIdentifier(char *pIdentifier) {
@@ -22,6 +26,7 @@ tConst *createConst(int32_t val) {
     tConst *constant = malloc(sizeof(tConst));
     constant->kennzeichen = KzConst;
     constant->value = val;
+    constant->index = constList->listLength;
     return constant;
 }
 
@@ -127,7 +132,37 @@ void addProcedureIdentifier(char* pIdentifier) { // bl4
     currProcedure = procedure;
 }
 
-void endProcedure() { // bl5
+int endProcedure() { // bl5
+    code(retProc);
+    CodeOut();
     deleteList(currProcedure->pListIdentifier);
     currProcedure = currProcedure->pointerParent;
+    return 1;
+}
+
+int bl6() {
+    code(entryProc, 0, currProcedure->indexProcedure, currProcedure->lengthVar);
+    return 1;
+}
+
+int fa1() {
+    int value = Morph.Value.number;
+    tConst * temp = searchConst(value);
+    if (temp == NULL) {
+        temp = createConst(value);
+        insertHead(constList, temp);
+    }
+    code(puConst, temp->index);
+    return 1;
+}
+
+int st10() {
+    puts("st10 ! entered");
+    code(putVal);
+    return 1;
+}
+
+int pr1() {
+    closeOFile();
+    return 1;
 }

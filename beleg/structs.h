@@ -45,7 +45,7 @@ typedef struct tCONST
 {
     tKennzeichen kennzeichen; //tKz  Kz;		/* Kennzeichen */
     long value; //long Val;		/* Wert der Konstanten*/
-    //int index; //int  Idx;		/* Index im Konstantenblock */ ---- ignoriert, da eine Liste ohne Indexen genutzt wird
+    int index; //int  Idx;		/* Index im Konstantenblock */ ---- ignoriert, da eine Liste ohne Indexen genutzt wird
 } tConst;
 
 typedef struct tVAR

@@ -2,12 +2,12 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include "code.h"
 #include "list.h"
 #include "lex.h"
 #include "parser.h"
 #include "structs.h"
 #include "namelist.h"
+#include "CodeGen.h"
 
 tProcedure *pMainPr;
 
@@ -18,10 +18,10 @@ extern List *pSLabl;   /* Keller fuer Label               */
 extern int    IdxCnst;  /* Zaehler fuer Konstantenindex    */
 extern tMorph Morph;
 extern char*  vCode;    /* Pointer auf dynamischen Bereich fuer Code */
-extern char*  pCode;    /* Pointer auf aktuelle Position             */
+extern int    iCode;    /* Pointer auf aktuelle Position             */
 extern short  numProc;  /* Zaehler fuer Prozeduren                   */
 extern int    LenCode;  /* Laenge des Codeausgabebereiches           */
-extern FILE*  pointedFile;
+FILE*  destFile;
 
 /* Weitere Funktionen ... */
 
@@ -30,30 +30,30 @@ extern FILE*  pointedFile;
 /*--------------------------*/
 void wr2ToCode(short x)
 {
-  *pCode++=(unsigned char)(x & 0xff);
-  *pCode++=(unsigned char)(x >> 8);
+  vCode[iCode++]=(unsigned char)(x & 0xff);
+  vCode[iCode++]=(unsigned char)(x >> 8);
 }
-void wr2ToCodeAtP(short x,char*pD)
+
+void wr2ToCodeAtP(short x,int iD)
 {
-  * pD   =(unsigned char)(x & 0xff);
-  *(pD+1)=(unsigned char)(x >> 8);
+  vCode[iD]   =(unsigned char)(x & 0xff);
+  vCode[iD+1] =(unsigned char)(x >> 8);
 }
 int code(tCode Code,...)
 {
   va_list ap;
   short sarg;
 
-  if (pCode-vCode+MAX_LEN_OF_CODE>=LenCode)
+  if (iCode + MAX_LEN_OF_CODE>=LenCode)
   {
     char* xCode=realloc(vCode,(LenCode+=1024));
 	 if (xCode==NULL) {
            printf("Out of memory\n");
            exit(-1);
      }
-    pCode=xCode+(pCode-vCode);
     vCode=xCode;
   }
-  *pCode++=(char)Code;
+  vCode[iCode++]=(char)Code;
   va_start(ap,Code);
   switch (Code)
   {
@@ -80,7 +80,7 @@ int code(tCode Code,...)
 	       break;
 
      /* keine Parameter */
-    case putStrg:
+    case putStrg: /*
                    if ((int)(pCode-vCode+strlen(Morph.Value.string)+1)>=LenCode)
 						 {
 						   char* xCode=realloc(vCode,(LenCode+=1024));
@@ -93,7 +93,7 @@ int code(tCode Code,...)
 					 }
                    strcpy(pCode,Morph.Value.string);
                    pCode+=strlen(pCode)+1;
-                   break;
+                   break;*/
      default     : break;
  }
   va_end  (ap);
@@ -102,10 +102,10 @@ int code(tCode Code,...)
 
 int CodeOut(void)
 {
-  unsigned short Len=(unsigned short)(pCode-vCode);
-  wr2ToCodeAtP((short)Len,vCode+1);
-  wr2ToCodeAtP((short)currProcedure->lengthVar,vCode+5);
-  if (Len==fwrite(vCode,sizeof(char),Len,pointedFile)) return OK;
+  unsigned short Len=(unsigned short)(iCode);
+  wr2ToCodeAtP((short)Len,1);
+  wr2ToCodeAtP((short)currProcedure->lengthVar,5);
+  if (Len==fwrite(vCode,sizeof(char),Len,destFile)) return OK;
   else                                            return FAIL;
 }
 
@@ -120,9 +120,9 @@ int openOFile(char* arg)
   if (strstr(vName,".pl0")==NULL) strcat(vName,".cl0");
   else *(strchr(vName,'.')+1)='c';
 
-  if ((pointedFile=fopen(vName,"wb"))!=NULL)
+  if ((destFile=fopen(vName,"wb"))!=NULL)
   {
-    fwrite(&i,sizeof(int64_t),1,pointedFile);
+    fwrite(&i,sizeof(int64_t),1,destFile);
     return OK;
   }
   else                                 return FAIL;
@@ -131,9 +131,12 @@ int openOFile(char* arg)
 
 int closeOFile(void)
 {
-  char vBuf2[2];
-  fseek(pointedFile,0,SEEK_SET);
-  wr2ToCodeAtP(numProc,vBuf2);
-  if (fwrite(vBuf2,2,1,pointedFile)==2) return OK;
+  int sys=8;
+  fseek(destFile,0,SEEK_SET);
+  //wr2ToCodeAtP(numProc,vBuf2);
+  if (fwrite(&numProc,2,1,destFile)==2);
   else                             return FAIL;
+  if (fwrite(&sys,2,1,destFile)==2);
+  else                             return FAIL;
+  return OK;
 }

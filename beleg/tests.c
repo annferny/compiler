@@ -20,7 +20,7 @@ void testAddConst() {
     tConst* const1 = constIdentifier1->pointerObject;
 
     if (const1 != NULL) {
-        printf("Found %s = %d in proc: %d\n", constIdentifier1->pointerName, const1->value, currProcedure->indexProcedure);
+        printf("Found %s = %ld in proc: %d\n", constIdentifier1->pointerName, const1->value, currProcedure->indexProcedure);
     }
 
     tIdentifier* identifierProc = createIdentifier("proc1");
@@ -47,11 +47,11 @@ void testAddConst() {
     tConst* const2 = constIdentifier2->pointerObject;
 
     if (const2 != NULL) {
-        printf("Found %s = %d in proc: %d\n", constIdentifier2->pointerName, const2->value, currProcedure->indexProcedure);
+        printf("Found %s = %ld in proc: %d\n", constIdentifier2->pointerName, const2->value, currProcedure->indexProcedure);
         printf("Length of the list: %d\n", constList->listLength);
         for (int i = 0; i < constList->listLength; i++) {
             tConst* item = getNext(constList);
-            printf("Const block elements: %d\n", item->value);
+            printf("Const block elements: %ld\n", item->value);
         }
     }
 }
