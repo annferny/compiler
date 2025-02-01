@@ -1,3 +1,9 @@
+/*
+Gavrilova Anna
+Matr.Nr: 53045
+s85499
+*/
+
 #ifndef PARSER_H
 #define PARSER_H
 

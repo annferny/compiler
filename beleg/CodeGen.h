@@ -1,3 +1,9 @@
+/*
+Gavrilova Anna
+Matr.Nr: 53045
+s85499
+*/
+
 #ifndef CODEGEN_H_
 #define CODEGEN_H_
 
@@ -8,5 +14,5 @@ int openOFile(char* arg);
 int closeOFile(void);
 int code(tCode Code,...);
 int CodeOut(void);
-
+int write_consts2file();
 #endif /* CODEGEN_H_ */

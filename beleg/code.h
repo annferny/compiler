@@ -1,3 +1,9 @@
+/*
+Gavrilova Anna
+Matr.Nr: 53045
+s85499
+*/
+
 typedef enum TCODE
 {
   /*--- Kellerbefehle ---*/

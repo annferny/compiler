@@ -1,11 +1,16 @@
+/*
+Gavrilova Anna
+Matr.Nr: 53045
+s85499
+*/
+
 #include "parser.h"
 #include <stdlib.h>
 #include "namelist.h"
 
 typedef unsigned long ul;
 extern tMorph Morph;
-char*  vCode;    /* Pointer auf dynamischen Bereich fuer Code */
-int    iCode;  
+
 int    LenCode;  /* Laenge des Codeausgabebereiches           */
 
 
@@ -87,8 +92,8 @@ tBog gStatement[] =
         /*16*/ {BgMo, {.M = morphemeCodeIdentifier}, NULL, 21, 0}, /*(15)--ident------->(20)*/
         /*17*/ {BgSy, {.S = '?'}, NULL, 18, 19},                   /*(16)--'?'--------->(17)*/
         /*18*/ {BgMo, {.M = morphemeCodeIdentifier}, NULL, 21, 0}, /*(17)--ident------->(20)*/
-        /*19*/ {BgSy, {.S = '!'}, st10, 20, 21},                    /*(18)--'!'--------->(19)*/
-        /*20*/ {BgGr, {.G = gExpression}, NULL, 21, 0},            /*(19)--express----->(20)*/
+        /*19*/ {BgSy, {.S = '!'}, NULL, 20, 21},                    /*(18)--'!'--------->(19)*/
+        /*20*/ {BgGr, {.G = gExpression}, st10, 21, 0},            /*(19)--express----->(20)*/
         /*21*/ {BgEn, {.S = 0}, NULL, 0, 0}                        /*(E)---(ENDE)-----------*/
 };
 

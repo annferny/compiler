@@ -1,6 +1,8 @@
-//
-// Created by annfe on 12/12/2024.
-//
+/*
+Gavrilova Anna
+Matr.Nr: 53045
+s85499
+*/
 
 #include "namelist.h"
 #include "CodeGen.h"
@@ -13,6 +15,10 @@ tProcedure *currProcedure;
 short numProc = 0;
 extern int LenCode;
 extern tMorph Morph;
+char*  vCode;    /* Pointer auf dynamischen Bereich fuer Code */ //start
+char*  pCode; //curr
+unsigned int cbuf_size;
+int    iCode;
 
 // TODO: probably add an update for the current procedure
 tIdentifier *createIdentifier(char *pIdentifier) {
@@ -144,7 +150,19 @@ int endProcedure() { // bl5
 }
 
 int bl6() {
-    code(entryProc, 0, currProcedure->indexProcedure, currProcedure->lengthVar);
+    int init_size=1024;
+    int len_code=0;
+    int pidx=currProcedure->indexProcedure;
+    int len_var=currProcedure->lengthVar;
+
+    vCode=malloc(init_size);
+    if (!vCode) {
+        perror("malloc");
+        exit(-1);
+    }
+    pCode=vCode;
+    cbuf_size=init_size;
+    code(entryProc, len_code, pidx, len_var);
     return 1;
 }
 
@@ -165,5 +183,6 @@ int st10() {
 }
 
 int pr1() {
+    write_consts2file();
     return closeOFile();
 }

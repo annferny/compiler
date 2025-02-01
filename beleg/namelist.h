@@ -1,6 +1,8 @@
-//
-// Created by annfe on 12/12/2024.
-//
+/*
+Gavrilova Anna
+Matr.Nr: 53045
+s85499
+*/
 
 #ifndef NAMELIST_H
 #define NAMELIST_H

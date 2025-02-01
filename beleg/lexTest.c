@@ -1,4 +1,8 @@
-// Arnold Beck
+/*
+Gavrilova Anna
+Matr.Nr: 53045
+s85499
+*/
 
 #include <stdio.h>
 #include <ctype.h>

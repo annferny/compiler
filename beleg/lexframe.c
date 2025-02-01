@@ -1,3 +1,9 @@
+/*
+Gavrilova Anna
+Matr.Nr: 53045
+s85499
+*/
+
 #include <string.h>
 #include <ctype.h>
 #include "lex.h"

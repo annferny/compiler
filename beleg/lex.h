@@ -1,3 +1,10 @@
+/*
+Gavrilova Anna
+Matr.Nr: 53045
+s85499
+*/
+
+
 #ifndef LEXER_H
 #define LEXER_H
 
