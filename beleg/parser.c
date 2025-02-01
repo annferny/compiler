@@ -132,7 +132,7 @@ int pars(tBog *pGraph)
     if(pGraph == gExpression) bogenName = "gExpression";
     while (1)
     {
-      printf("in pars loop of %s %d %d\n", bogenName, pBog->iNext, pBog->iAlt);
+      //printf("in pars loop of %s %d %d\n", bogenName, pBog->iNext, pBog->iAlt);
         switch (pBog->BgD)
         {
         case BgNl:
@@ -148,6 +148,7 @@ int pars(tBog *pGraph)
             succ = pars(pBog->BgX.G);
             break;
         case BgEn:
+            /*
             if(pGraph == gProgramm) printf("return: gProgramm\n");
             if(pGraph == gStatement) printf("return: gStatement\n");
             if(pGraph == gBlock) printf("return: gBlock\n");
@@ -155,6 +156,7 @@ int pars(tBog *pGraph)
             if(pGraph == gFactor) printf("return: gFactor\n");
             if(pGraph == gCondition) printf("return: gCondition\n");
             if(pGraph == gExpression) printf("return: gExpression\n");
+            */
             return 1; /* Ende erreichet - Erfolg */
         }
         if (succ && pBog->fx != NULL)
@@ -179,6 +181,5 @@ int pars(tBog *pGraph)
                 Lexer();
             pBog = pGraph + pBog->iNext;
         }
-        
     } /* while */
 }

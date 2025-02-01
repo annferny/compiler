@@ -134,7 +134,10 @@ void addProcedureIdentifier(char* pIdentifier) { // bl4
 
 int endProcedure() { // bl5
     code(retProc);
-    CodeOut();
+    //code(entryProc, LenCode, currProcedure->indexProcedure, currProcedure->lengthVar);
+    if (CodeOut() != 1) {
+        printf("Code out failed.\n");
+    }
     deleteList(currProcedure->pListIdentifier);
     currProcedure = currProcedure->pointerParent;
     return 1;
@@ -157,12 +160,10 @@ int fa1() {
 }
 
 int st10() {
-    puts("st10 ! entered");
     code(putVal);
     return 1;
 }
 
 int pr1() {
-    closeOFile();
-    return 1;
+    return closeOFile();
 }

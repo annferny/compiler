@@ -134,9 +134,9 @@ static void writeReadEnd(void) {
 
 static void end() {
     int i;
-    printf("Token: %s\n",vBuf);
+   // printf("Token: %s\n",vBuf);
     const size_t numKeywords = sizeof(keyWords) / sizeof(keyWords[0]);
-    printf("Morph %s\n", vBuf);
+   // printf("Morph %s\n", vBuf);
     Morph.positionOfColumn = column;
     Morph.positionOfLine = line;
     switch (actualStateOfAutomat) {

@@ -32,7 +32,7 @@ int main(int argc, void *argv[])
 
 
     int x = pars(gProgramm);
-    printf("Successfully parsed\n");
+    //printf("Successfully parsed\n");
 
     deleteList(constList);
 
