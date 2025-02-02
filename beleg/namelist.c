@@ -28,7 +28,7 @@ tIdentifier *createIdentifier(char *pIdentifier) {
     return identifier;
 }
 
-tConst *createConst(int32_t val) {
+tConst *createConst(int val) {
     tConst *constant = malloc(sizeof(tConst));
     constant->kennzeichen = KzConst;
     constant->value = val;
@@ -96,7 +96,7 @@ int addConstIdentifier() { // bl1
 
     tIdentifier *constIdentifier = createIdentifier(pIdentifier);
     constIdentifier->kennzeichen = KzConst;
-    insertHead(currProcedure->pListIdentifier, constIdentifier);
+    insertTail(currProcedure->pListIdentifier, constIdentifier);
     return 1;
 }
 
@@ -106,7 +106,7 @@ int addConstToIdentifier() {// bl2
     tConst *temp = searchConst(value);
     if (temp == NULL) {
         temp = createConst(value);
-        insertHead(constList, temp);
+        insertTail(constList, temp);
     }
     tIdentifier *constIdentifier = getFirst(currProcedure->pListIdentifier);
     constIdentifier->pointerObject = temp;
@@ -123,7 +123,7 @@ int addVarIdentifier() { // bl3
 
     tIdentifier *identifier = createIdentifier(pIdentifier);
     identifier->kennzeichen = KzVar;
-    insertHead(currProcedure->pListIdentifier, identifier);
+    insertTail(currProcedure->pListIdentifier, identifier);
 
     tVar *variable = createVar(currProcedure->lengthVar);
     currProcedure->lengthVar += 8;
@@ -142,7 +142,7 @@ int addProcedureIdentifier() { // bl4
 
     tIdentifier *identifier = createIdentifier(pIdentifier);
     identifier->kennzeichen = KzProcedure;
-    insertHead(currProcedure->pListIdentifier, identifier);
+    insertTail(currProcedure->pListIdentifier, identifier);
 
     tProcedure *procedure = createProcedure(currProcedure);
     identifier->pointerObject = procedure;
@@ -186,7 +186,7 @@ int fa1() {
     tConst * temp = searchConst(value);
     if (temp == NULL) {
         temp = createConst(value);
-        insertHead(constList, temp);
+        insertTail(constList, temp);
     }
     code(puConst, temp->index);
     return 1;
@@ -231,4 +231,30 @@ int pr1() {
     printf("pr1\n");
     write_consts2file();
     return closeOFile();
+}
+
+
+int ex1()
+{
+    return code(vzMinus);
+}
+
+int ex2()
+{
+    return code(OpAdd);
+}
+
+int ex3()
+{
+    return code(OpSub);
+}
+
+int te1()
+{
+    return code(OpMult);
+}
+
+int te2()
+{
+    return code(OpDiv);
 }

@@ -29,5 +29,12 @@ int fa1();
 int fa2();
 int bl6();
 
+int ex1();
+int ex2();
+int ex3();
+
+int te1();
+int te2();
+
 #endif //NAMELIST_H
 

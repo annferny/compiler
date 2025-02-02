@@ -138,17 +138,20 @@ int closeOFile(void) {
 
 int write_consts2file()
 {
-    for (int i = 0; i < constList->listLength; i++) {
-        if (i==0) {
-            tConst* elem = getFirst(constList);
-            if (sizeof(int) != fwrite(&elem->value, sizeof(int), 1, destFile))
-                return FAIL;
-        } else {
-            tConst* elem = getNext(constList);
-            if (sizeof(int) != fwrite(&elem->value, sizeof(int), 1, destFile))
-                return FAIL;
-        }
+    char *constBlock = malloc(64 * sizeof(int));
+    if (!constBlock) {
+        perror("malloc");
+        exit(-1);
     }
+
+    tConst *temp = getFirst(constList);
+    for (int i = 0; i < constList->listLength; i++) {
+        wr2ToCodeAtP((short)temp->value, constBlock+i*8);
+        temp = getNext(constList);
+    }
+
+    fwrite(constBlock, sizeof(char), 8*constList->listLength, destFile);
+    free(constBlock);
 
     return OK;
 }
