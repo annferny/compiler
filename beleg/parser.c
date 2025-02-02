@@ -122,6 +122,23 @@ tBog gCondition[] =
         /*10*/ {BgEn, {(ul)0}, NULL, 0, 0}                /*(E)-------------(ENDE) */
 };
 
+//tBog gCondition[] =
+//    {
+//    /* 0*/ {BgSy, {(ul)zOdd}, NULL, 1, 2},            /*(0)---'Odd'-------->(1)*/
+//    /* 1*/ {BgGr, {.G = gExpression}, co1, 10, 0},   /*(1)---express----->(10)*/
+//    /* 2*/ {BgGr, {.G = gExpression}, NULL, 3, 0},    /*(2)---express------>(3)*/
+//    /* 3*/ {BgSy, {(ul)'='}, co2, 9, 4},             /*(3)----'='--------->(9)*/
+//    /* 4*/ {BgSy, {(ul)'#'}, co3, 9, 5},             /*(4)----'#'--------->(9)*/
+//    /* 5*/ {BgSy, {(ul)'<'}, co4, 9, 6},             /*(5)----'<'--------->(9)*/
+//    /* 6*/ {BgSy, {(ul)'>'}, co5, 9, 7},             /*(6)----'>'--------->(9)*/
+//    /* 7*/ {BgSy, {(ul)zLessOrEqual}, co6, 9, 8},    /*(7)----'<='-------->(9)*/
+//    /* 8*/ {BgSy, {(ul)zGreaterOrEqual}, co7, 9, 0}, /*(8)----'>='-------->(9)*/
+//    /* 9*/ {BgGr, {.G = gExpression}, co8, 11, 12},   /*(9)---express----->(10)*/
+//    /*10*/ {BgGr, {(ul)zAND}, NULL, co9, 11},         /*(9)---express----->(10)*/
+//    /*11*/ {BgGr, {(ul)zOR}, NULL, co10, 12},         /*(9)---express----->(10)*/
+//    /*12*/ {BgEn, {(ul)0}, NULL, 0, 0}                /*(E)-------------(ENDE) */
+//    };
+
 int pars(tBog *pGraph)
 {
     tBog *pBog = pGraph;

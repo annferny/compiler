@@ -80,7 +80,7 @@ int code(tCode Code,...)
         case jnot:
         case call:
                 sarg=va_arg(ap,int); /* Prozedurnummer               */
-        wr2ToCode(sarg);
+                wr2ToCode(sarg);
         break;
 
         /* keine Parameter */
@@ -120,7 +120,7 @@ int openOFile(char *arg) {
     else *(strchr(vName, '.') + 1) = 'c';
 
     if ((destFile = fopen(vName, "wb")) != NULL) {
-        fwrite(&i, sizeof(int64_t), 1, destFile);
+        fwrite(&i, sizeof(int), 1, destFile);
         return OK;
     } else return FAIL;
 }
@@ -138,9 +138,17 @@ int closeOFile(void) {
 
 int write_consts2file()
 {
-    int len=sizeof(int)* constList->listLength;
-    if (len==fwrite(constList,len,constList->listLength,destFile))
-        return OK;
-    else
-        return FAIL;
+    for (int i = 0; i < constList->listLength; i++) {
+        if (i==0) {
+            tConst* elem = getFirst(constList);
+            if (sizeof(int) != fwrite(&elem->value, sizeof(int), 1, destFile))
+                return FAIL;
+        } else {
+            tConst* elem = getNext(constList);
+            if (sizeof(int) != fwrite(&elem->value, sizeof(int), 1, destFile))
+                return FAIL;
+        }
+    }
+
+    return OK;
 }
