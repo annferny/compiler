@@ -86,19 +86,23 @@ tIdentifier *searchIdentifierGlobal(char *pIdentifier) {
     return NULL;
 }
 
-void addConstIdentifier(char *pIdentifier) {
-    // bl1
+int addConstIdentifier() { // bl1
+    printf("bl1\n");
+    char *pIdentifier = Morph.Value.string;
     if (searchIdentifierLocal(currProcedure, pIdentifier) != NULL) {
         printf("Identifier \"%s\" already exists in proc nr.: %d\n", pIdentifier, currProcedure->indexProcedure);
         exit(-1);
     }
 
     tIdentifier *constIdentifier = createIdentifier(pIdentifier);
+    constIdentifier->kennzeichen = KzConst;
     insertHead(currProcedure->pListIdentifier, constIdentifier);
+    return 1;
 }
 
-void addConstToIdentifier(int32_t value) {
-    // bl2
+int addConstToIdentifier() {// bl2
+    printf("bl2\n");
+    int value = Morph.Value.number;
     tConst *temp = searchConst(value);
     if (temp == NULL) {
         temp = createConst(value);
@@ -106,39 +110,48 @@ void addConstToIdentifier(int32_t value) {
     }
     tIdentifier *constIdentifier = getFirst(currProcedure->pListIdentifier);
     constIdentifier->pointerObject = temp;
+    return 1;
 }
 
-void addVarIdentifier(char *pIdentifier) {
-    // bl3
+int addVarIdentifier() { // bl3
+    printf("bl3\n");
+    char *pIdentifier = Morph.Value.string;
     if (searchIdentifierLocal(currProcedure, pIdentifier) != NULL) {
         printf("Identifier \"%s\" already exists in proc nr.: %d\n", pIdentifier, currProcedure->indexProcedure);
         exit(-1);
     }
 
     tIdentifier *identifier = createIdentifier(pIdentifier);
+    identifier->kennzeichen = KzVar;
     insertHead(currProcedure->pListIdentifier, identifier);
 
     tVar *variable = createVar(currProcedure->lengthVar);
     currProcedure->lengthVar += 8;
 
     identifier->pointerObject = variable;
+    return 1;
 }
 
-void addProcedureIdentifier(char* pIdentifier) { // bl4
+int addProcedureIdentifier() { // bl4
+    printf("bl4\n");
+    char *pIdentifier = Morph.Value.string;
     if (searchIdentifierLocal(currProcedure, pIdentifier) != NULL) {
         printf("Identifier \"%s\" already exists in proc nr.: %d\n", pIdentifier, currProcedure->indexProcedure);
         exit(-1);
     }
 
     tIdentifier *identifier = createIdentifier(pIdentifier);
+    identifier->kennzeichen = KzProcedure;
     insertHead(currProcedure->pListIdentifier, identifier);
 
     tProcedure *procedure = createProcedure(currProcedure);
     identifier->pointerObject = procedure;
     currProcedure = procedure;
+    return 1;
 }
 
 int endProcedure() { // bl5
+    printf("bl5\n");
     code(retProc);
     //code(entryProc, LenCode, currProcedure->indexProcedure, currProcedure->lengthVar);
     if (CodeOut() != 1) {
@@ -150,6 +163,7 @@ int endProcedure() { // bl5
 }
 
 int bl6() {
+    printf("bl6\n");
     int init_size=1024;
     int len_code=0;
     int pidx=currProcedure->indexProcedure;
@@ -167,6 +181,7 @@ int bl6() {
 }
 
 int fa1() {
+    printf("fa1\n");
     int value = Morph.Value.number;
     tConst * temp = searchConst(value);
     if (temp == NULL) {
@@ -177,12 +192,43 @@ int fa1() {
     return 1;
 }
 
+int fa2() {
+    printf("fa2\n");
+    tIdentifier *bezeichner = searchIdentifierGlobal(Morph.Value.string);
+    if (bezeichner == NULL) {
+        perror("fa2: Bezeichner nicht gefunden\n");
+        exit(-1);
+    }
+
+    switch (bezeichner->kennzeichen) {
+        case KzConst:
+            code(puConst, ((tConst*)bezeichner->pointerObject)->index);
+            break;
+        case KzVar:
+            tVar *variable = bezeichner->pointerObject;
+            if (bezeichner->indexProcedure == 0) {
+                code(puValVrMain, variable->relativeAddress);
+            } else if (bezeichner->indexProcedure == currProcedure->indexProcedure) {
+                code(puValVrLocl, variable->relativeAddress);
+            } else {
+                code(puValVrGlob, variable->relativeAddress, bezeichner->indexProcedure);
+            }
+        case KzProcedure:
+            perror("fa2: Bezeichner ist eine Prozedur\n");
+            return 0;
+        default: perror("fa2: unbekanntes Bezeichnertyp\n");;
+    }
+    return 1;
+}
+
 int st10() {
+    printf("st10\n");
     code(putVal);
     return 1;
 }
 
 int pr1() {
+    printf("pr1\n");
     write_consts2file();
     return closeOFile();
 }

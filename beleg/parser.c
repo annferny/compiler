@@ -26,17 +26,17 @@ tBog gProgramm[] =
 tBog gBlock[] =
     {
         /* 0*/ {BgSy, {(ul)zConst}, NULL, 1, 6}, /*(0)---'CONST'-->(1)*/ // NULL steht jetzt für zukunftige Funktionen
-        /* 1*/ {BgMo, {(ul)morphemeCodeIdentifier}, NULL, 2, 0},         /*(1)---ident---->(2)*/
+        /* 1*/ {BgMo, {(ul)morphemeCodeIdentifier}, addConstIdentifier, 2, 0},         /*(1)---ident---->(2)*/
         /* 2*/ {BgSy, {(ul)'='}, NULL, 3, 0},                            /*(2)----'='----->(3)*/
-        /* 3*/ {BgMo, {(ul)morphemeCodeNumber}, NULL, 4, 0},             /*(3)---number--->(4)*/
+        /* 3*/ {BgMo, {(ul)morphemeCodeNumber}, addConstToIdentifier, 4, 0},             /*(3)---number--->(4)*/
         /* 4*/ {BgSy, {(ul)','}, NULL, 1, 5},                            /*(4)----','----->(1)*/
         /* 5*/ {BgSy, {(ul)';'}, NULL, 6, 0},                            /*(5)----';'----->(6)*/
         /* 6*/ {BgSy, {(ul)zVar}, NULL, 7, 10},                          /*(6)---'Var'---->(7)*/
-        /* 7*/ {BgMo, {(ul)morphemeCodeIdentifier}, NULL, 8, 0},         /*(7)---ident---->(8)*/
+        /* 7*/ {BgMo, {(ul)morphemeCodeIdentifier}, addVarIdentifier, 8, 0},         /*(7)---ident---->(8)*/
         /* 8*/ {BgSy, {(ul)','}, NULL, 7, 9},                            /*(8)----','----->(7)*/
         /* 9*/ {BgSy, {(ul)';'}, NULL, 10, 0},                           /*(9)----';'----->(10)*/
         /*10*/ {BgSy, {(ul)zProcedure}, NULL, 11, 17},                   /*(10)--'Var'---->(11)*/
-        /*11*/ {BgMo, {(ul)morphemeCodeIdentifier}, NULL, 12, 0},        /*(11)---ident--->(12)*/
+        /*11*/ {BgMo, {(ul)morphemeCodeIdentifier}, addProcedureIdentifier, 12, 0},        /*(11)---ident--->(12)*/
         /*12*/ {BgSy, {(ul)';'}, NULL, 13, 0},                           /*(12)----';'---->(13)*/
         /*13*/ {BgGr, {.G = gBlock}, NULL, 14, 0},                       /*(13)---block--->(14)*/
         /*14*/ {BgSy, {(ul)';'}, NULL, 10, 0},                           /*(14)----';'---->(10)*/
@@ -99,7 +99,7 @@ tBog gStatement[] =
 
 tBog gFactor[] =
     {
-        /* 0*/ {BgMo, {(ul)morphemeCodeIdentifier}, NULL, 5, 1}, /*(0)---ident-------->(E)*/ // NULL steht jetzt für zukunftige Funktionen
+        /* 0*/ {BgMo, {(ul)morphemeCodeIdentifier}, fa2, 5, 1}, /*(0)---ident-------->(E)*/ // NULL steht jetzt für zukunftige Funktionen
         /* 1*/ {BgMo, {(ul)morphemeCodeNumber}, fa1, 5, 2},                                 /* +---number-------->(E)*/
         /* 2*/ {BgSy, {(ul)'('}, NULL, 3, 0},                                                /*(+)----'('--------->(3)*/
         /* 3*/ {BgGr, {.G = gExpression}, NULL, 4, 0},                                       /*(1)---express------>(4)*/

@@ -17,15 +17,16 @@ tVar* createVar(int relativeAddress);
 tProcedure* createProcedure(tProcedure* pParent);
 tIdentifier* searchIdentifierLocal(tProcedure* pProcedure,char* pIdentifier);
 tIdentifier* searchIdentifierGlobal(char* pIdentifier);
-void addConstIdentifier(char* pIdentifier);
-void addConstToIdentifier(int32_t value);
-void addVarIdentifier(char* pIdentifier);
-void addProcedureIdentifier(char* pIdentifier);
+int addConstIdentifier();
+int addConstToIdentifier();
+int addVarIdentifier();
+int addProcedureIdentifier();
 int endProcedure();
 
 int pr1();
 int st10();
 int fa1();
+int fa2();
 int bl6();
 
 #endif //NAMELIST_H
