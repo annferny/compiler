@@ -67,9 +67,8 @@ tConst *searchConst(int32_t Val) {
 
 tIdentifier *searchIdentifierLocal(tProcedure *pProcedure, char *pIdentifier) {
     tIdentifier *temp = getFirst(pProcedure->pListIdentifier);
-
     for (int i = 0; i < pProcedure->pListIdentifier->listLength; i++) {
-        if (temp->pointerName == pIdentifier) return temp;
+        if (strcmp(temp->pointerName, pIdentifier) == 0) return temp;
         temp = getNext(pProcedure->pListIdentifier);
     }
     return NULL;
@@ -94,7 +93,7 @@ int addConstIdentifier() { // bl1
         exit(-1);
     }
 
-    tIdentifier *constIdentifier = createIdentifier(pIdentifier);
+    tIdentifier *constIdentifier = createIdentifier(strdup(pIdentifier));
     constIdentifier->kennzeichen = KzConst;
     insertTail(currProcedure->pListIdentifier, constIdentifier);
     return 1;
@@ -121,7 +120,7 @@ int addVarIdentifier() { // bl3
         exit(-1);
     }
 
-    tIdentifier *identifier = createIdentifier(pIdentifier);
+    tIdentifier *identifier = createIdentifier(strdup(pIdentifier));
     identifier->kennzeichen = KzVar;
     insertTail(currProcedure->pListIdentifier, identifier);
 
@@ -140,7 +139,7 @@ int addProcedureIdentifier() { // bl4
         exit(-1);
     }
 
-    tIdentifier *identifier = createIdentifier(pIdentifier);
+    tIdentifier *identifier = createIdentifier(strdup(pIdentifier));
     identifier->kennzeichen = KzProcedure;
     insertTail(currProcedure->pListIdentifier, identifier);
 
@@ -213,12 +212,88 @@ int fa2() {
             } else {
                 code(puValVrGlob, variable->relativeAddress, bezeichner->indexProcedure);
             }
+            break;
         case KzProcedure:
             perror("fa2: Bezeichner ist eine Prozedur\n");
             return 0;
         default: perror("fa2: unbekanntes Bezeichnertyp\n");;
     }
     return 1;
+}
+
+int st1() {
+    printf("st1\n");
+    tIdentifier *bezeichner = searchIdentifierGlobal(Morph.Value.string);
+    if (bezeichner == NULL) {
+        perror("st1: Bezeichner nicht gefunden\n");
+        exit(-1);
+    }
+
+    if (bezeichner->kennzeichen == KzVar) {
+        tVar *variable = bezeichner->pointerObject;
+        if (bezeichner->indexProcedure == 0) {
+            code(puAdrVrMain, variable->relativeAddress);
+        } else if (bezeichner->indexProcedure == currProcedure->indexProcedure) {
+            code(puAdrVrLocl, variable->relativeAddress);
+        } else {
+            code(puAdrVrGlob, variable->relativeAddress, bezeichner->indexProcedure);
+        }
+    } else {
+        perror("st1: Bezeichner ist nicht die Variable\n");
+        return FAIL;
+    }
+
+    return OK;
+}
+
+int st2() {
+    printf("st2\n");
+    code(storeVal);
+    return OK;
+}
+
+int st8() {
+    printf("st8\n");
+    tIdentifier *bezeichner = searchIdentifierGlobal(Morph.Value.string);
+    if (bezeichner == NULL) {
+        perror("st8: Bezeichner nicht gefunden\n");
+        exit(-1);
+    }
+
+    if (bezeichner->kennzeichen == KzProcedure) {
+        code(call, ((tProcedure*)bezeichner->pointerObject)->indexProcedure);
+    } else {
+        perror("st8: Bezeichner ist nicht Prozedur\n");
+        return FAIL;
+    }
+
+    return OK;
+}
+
+int st9() {
+    printf("st9\n");
+    tIdentifier *bezeichner = searchIdentifierGlobal(Morph.Value.string);
+    if (bezeichner == NULL) {
+        perror("st9: Bezeichner nicht gefunden\n");
+        exit(-1);
+    }
+
+    if (bezeichner->kennzeichen == KzVar) {
+        tVar *variable = bezeichner->pointerObject;
+        if (bezeichner->indexProcedure == 0) {
+            code(puAdrVrMain, variable->relativeAddress);
+        } else if (bezeichner->indexProcedure == currProcedure->indexProcedure) {
+            code(puAdrVrLocl, variable->relativeAddress);
+        } else {
+            code(puAdrVrGlob, variable->relativeAddress, bezeichner->indexProcedure);
+        }
+        code(getVal);
+    } else {
+        perror("st9: Bezeichner ist nicht die Variable\n");
+        return FAIL;
+    }
+
+    return OK;
 }
 
 int st10() {

@@ -71,9 +71,9 @@ tBog gTerm[] =
 
 tBog gStatement[] =
     {
-        /* 0*/ {BgMo, {.M = morphemeCodeIdentifier}, NULL, 1, 3},  /*(0)---ident-------->(1)*/
+        /* 0*/ {BgMo, {.M = morphemeCodeIdentifier}, st1, 1, 3},  /*(0)---ident-------->(1)*/
         /* 1*/ {BgSy, {(ul)zResult}, NULL, 2, 0},                  /*(1)---':='--------->(2)*/
-        /* 2*/ {BgGr, {.G = gExpression}, NULL, 21, 0},            /*(2)---express----->(20)*/
+        /* 2*/ {BgGr, {.G = gExpression}, st2, 21, 0},            /*(2)---express----->(20)*/
         /* 3*/ {BgSy, {(ul)zIf}, NULL, 4, 7},                      /*(3)---'if'--------->(4)*/
         /* 4*/ {BgGr, {.G = gCondition}, NULL, 5, 0},              /*(4)---condition---->(5)*/
         /* 5*/ {BgSy, {(ul)zThen}, NULL, 6, 0},                    /*(5)---'then'------->(6)*/
@@ -85,13 +85,11 @@ tBog gStatement[] =
         /*11*/ {BgSy, {(ul)zBegin}, NULL, 12, 15},                 /*(11)--'begin'----->(12)*/
         /*12*/ {BgGr, {.G = gStatement}, NULL, 13, 0},             /*(12)--statement--->(13)*/
         /*13*/ {BgSy, {.S = ';'}, NULL, 12, 14},                   /*(13)--'*'--------->(12)*/
-
-        /*14*/ {BgSy, {(ul)zEnd}, NULL, 21, 0},                    /*(14)--'end'----->(15)*/  
-
+        /*14*/ {BgSy, {(ul)zEnd}, NULL, 21, 0},                    /*(14)--'end'----->(15)*/
         /*15*/ {BgSy, {(ul)zCall}, NULL, 16, 17},                  /*(14)--'begin'----->(15)*/
-        /*16*/ {BgMo, {.M = morphemeCodeIdentifier}, NULL, 21, 0}, /*(15)--ident------->(20)*/
+        /*16*/ {BgMo, {.M = morphemeCodeIdentifier}, st8, 21, 0}, /*(15)--ident------->(20)*/
         /*17*/ {BgSy, {.S = '?'}, NULL, 18, 19},                   /*(16)--'?'--------->(17)*/
-        /*18*/ {BgMo, {.M = morphemeCodeIdentifier}, NULL, 21, 0}, /*(17)--ident------->(20)*/
+        /*18*/ {BgMo, {.M = morphemeCodeIdentifier}, st9, 21, 0}, /*(17)--ident------->(20)*/
         /*19*/ {BgSy, {.S = '!'}, NULL, 20, 21},                    /*(18)--'!'--------->(19)*/
         /*20*/ {BgGr, {.G = gExpression}, st10, 21, 0},            /*(19)--express----->(20)*/
         /*21*/ {BgEn, {.S = 0}, NULL, 0, 0}                        /*(E)---(ENDE)-----------*/

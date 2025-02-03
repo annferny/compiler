@@ -22,12 +22,18 @@ int addConstToIdentifier();
 int addVarIdentifier();
 int addProcedureIdentifier();
 int endProcedure();
+int bl6();
 
 int pr1();
+
+int st1();
+int st2();
+int st8();
+int st9();
 int st10();
+
 int fa1();
 int fa2();
-int bl6();
 
 int ex1();
 int ex2();
