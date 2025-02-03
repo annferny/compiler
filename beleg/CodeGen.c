@@ -25,16 +25,10 @@ extern int IdxCnst; /* Zaehler fuer Konstantenindex    */
 extern tMorph Morph;
 extern char *vCode; /* Pointer auf dynamischen Bereich fuer Code */
 extern char*  pCode;    /* Pointer auf aktuelle Position             */
-// extern int iCode; /* Pointer auf aktuelle Position             */
 extern short numProc; /* Zaehler fuer Prozeduren                   */
 extern int LenCode; /* Laenge des Codeausgabebereiches           */
 FILE *destFile;
 
-/* Weitere Funktionen ... */
-
-/*--------------------------*/
-
-/*--------------------------*/
 void wr2ToCode(short x) {
     *pCode++=(unsigned char)(x & 0xff);
     *pCode++=(unsigned char)(x >> 8);
@@ -129,7 +123,6 @@ int closeOFile(void) {
 
     unsigned short sys = 8;
     fseek(destFile, 0,SEEK_SET);
-    //wr2ToCodeAtP(numProc,vBuf2);
     if (fwrite(&numProc, 2, 1, destFile) == 1);
     else return FAIL;
     if (fwrite(&sys, 2, 1, destFile) == 1);

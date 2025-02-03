@@ -35,10 +35,8 @@ int main(int argc, void *argv[])
     constList = createList();
 
 
-    int x = pars(gProgramm);
-    //printf("Successfully parsed\n");
+    if (pars(gProgramm) == 1) printf("OK\n");
 
     deleteList(constList);
-
     return 0;
 }

@@ -58,7 +58,7 @@ typedef struct tLABL
 {
     tKennzeichen kennzeichen; //tKz Kz;		/* Kennzeichen */
     long indexJump; //long iJmp;		/* Pointer in Codeausgabebereich */
-} tLabl;
+} tLabel;
 
 // Struct of one element of the list
 typedef struct connectElements

@@ -15,4 +15,5 @@ int closeOFile(void);
 int code(tCode Code,...);
 int CodeOut(void);
 int write_consts2file();
+void wr2ToCodeAtP(short x,char*pD);
 #endif /* CODEGEN_H_ */

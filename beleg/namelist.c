@@ -7,6 +7,7 @@ s85499
 #include "namelist.h"
 #include "CodeGen.h"
 #include "parser.h"
+#include "stack.h"
 
 #include <stdlib.h>
 
@@ -19,6 +20,7 @@ char*  vCode;    /* Pointer auf dynamischen Bereich fuer Code */ //start
 char*  pCode; //curr
 unsigned int cbuf_size;
 int    iCode;
+static int condition_operator;
 
 tIdentifier *createIdentifier(char *pIdentifier) {
     tIdentifier *identifier = malloc(sizeof(tIdentifier));
@@ -85,7 +87,6 @@ tIdentifier *searchIdentifierGlobal(char *pIdentifier) {
 }
 
 int addConstIdentifier() { // bl1
-    printf("bl1\n");
     char *pIdentifier = Morph.Value.string;
     if (searchIdentifierLocal(currProcedure, pIdentifier) != NULL) {
         printf("Identifier \"%s\" already exists in proc nr.: %d\n", pIdentifier, currProcedure->indexProcedure);
@@ -99,7 +100,6 @@ int addConstIdentifier() { // bl1
 }
 
 int addConstToIdentifier() {// bl2
-    printf("bl2\n");
     int value = Morph.Value.number;
     tConst *temp = searchConst(value);
     if (temp == NULL) {
@@ -112,7 +112,6 @@ int addConstToIdentifier() {// bl2
 }
 
 int addVarIdentifier() { // bl3
-    printf("bl3\n");
     char *pIdentifier = Morph.Value.string;
     if (searchIdentifierLocal(currProcedure, pIdentifier) != NULL) {
         printf("Identifier \"%s\" already exists in proc nr.: %d\n", pIdentifier, currProcedure->indexProcedure);
@@ -131,7 +130,6 @@ int addVarIdentifier() { // bl3
 }
 
 int addProcedureIdentifier() { // bl4
-    printf("bl4\n");
     char *pIdentifier = Morph.Value.string;
     if (searchIdentifierLocal(currProcedure, pIdentifier) != NULL) {
         printf("Identifier \"%s\" already exists in proc nr.: %d\n", pIdentifier, currProcedure->indexProcedure);
@@ -149,7 +147,6 @@ int addProcedureIdentifier() { // bl4
 }
 
 int endProcedure() { // bl5
-    printf("bl5\n");
     code(retProc);
     //code(entryProc, LenCode, currProcedure->indexProcedure, currProcedure->lengthVar);
     if (CodeOut() != 1) {
@@ -161,7 +158,6 @@ int endProcedure() { // bl5
 }
 
 int bl6() {
-    printf("bl6\n");
     int init_size=1024;
     int len_code=0;
     int pidx=currProcedure->indexProcedure;
@@ -179,7 +175,6 @@ int bl6() {
 }
 
 int fa1() {
-    printf("fa1\n");
     int value = Morph.Value.number;
     tConst * temp = searchConst(value);
     if (temp == NULL) {
@@ -191,7 +186,6 @@ int fa1() {
 }
 
 int fa2() {
-    printf("fa2\n");
     tIdentifier *bezeichner = searchIdentifierGlobal(Morph.Value.string);
     if (bezeichner == NULL) {
         perror("fa2: Bezeichner nicht gefunden\n");
@@ -221,7 +215,6 @@ int fa2() {
 }
 
 int st1() {
-    printf("st1\n");
     tIdentifier *bezeichner = searchIdentifierGlobal(Morph.Value.string);
     if (bezeichner == NULL) {
         perror("st1: Bezeichner nicht gefunden\n");
@@ -246,13 +239,81 @@ int st1() {
 }
 
 int st2() {
-    printf("st2\n");
     code(storeVal);
     return OK;
 }
 
+int st3() {
+    tLabel *label = createLabel();
+    pushLabel(label);
+    code(jnot, 0);
+
+    return 1;
+}
+
+int st4() {
+    tLabel *label = popLabel();
+
+    if (label == NULL) {
+        perror("Label stack is empty");
+        exit(-1);
+    }
+
+    int relativeAddress = (pCode - vCode) - label->indexJump - 3;
+    wr2ToCodeAtP(relativeAddress, vCode + label->indexJump + 1);
+
+    free(label);
+
+    return 1;
+}
+
+int st5() {
+    tLabel *label1 = createLabel();
+    pushLabel(label1);
+
+    return 1;
+}
+
+int st6() {
+    tLabel *label2 = createLabel();
+
+    pushLabel(label2);
+
+    code(jnot, 0);
+
+    return 1;
+}
+
+int st7() {
+    tLabel *label2 = popLabel();
+
+    if (label2 == NULL) {
+        perror("Label stack is empty");
+        exit(-1);
+    }
+
+    int relativeAddress = (pCode - vCode) - label2->indexJump - 3; // -3 for jnot instruction size
+
+    wr2ToCodeAtP(relativeAddress, vCode + label2->indexJump + 1);
+
+    tLabel *label1 = popLabel();
+
+    if (label1 == NULL) {
+        perror("Label stack is empty");
+        exit(-1);
+    }
+
+    relativeAddress = label1->indexJump - (pCode - vCode) - 3; // -3 for jmp instruction size
+
+    code(jmp, relativeAddress);
+
+    free(label1);
+    free(label2);
+
+    return 1;
+}
+
 int st8() {
-    printf("st8\n");
     tIdentifier *bezeichner = searchIdentifierGlobal(Morph.Value.string);
     if (bezeichner == NULL) {
         perror("st8: Bezeichner nicht gefunden\n");
@@ -270,7 +331,6 @@ int st8() {
 }
 
 int st9() {
-    printf("st9\n");
     tIdentifier *bezeichner = searchIdentifierGlobal(Morph.Value.string);
     if (bezeichner == NULL) {
         perror("st9: Bezeichner nicht gefunden\n");
@@ -296,13 +356,11 @@ int st9() {
 }
 
 int st10() {
-    printf("st10\n");
     code(putVal);
     return 1;
 }
 
 int pr1() {
-    printf("pr1\n");
     write_consts2file();
     return closeOFile();
 }
@@ -331,4 +389,42 @@ int te1()
 int te2()
 {
     return code(OpDiv);
+}
+
+int co1()
+{
+    return code(odd);
+}
+//co2-7
+int set_cond_opp()
+{
+    condition_operator=Morph.Value.symbol;
+    return 1;
+}
+//co8
+int co8()
+{
+    switch(condition_operator) {
+        case '=':
+            code(cmpEQ);
+        break;
+        case '#':
+            code(cmpNE);
+        break;
+        case '<':
+            code(cmpLT);
+        break;
+        case '>':
+            code(cmpGT);
+        break;
+        case zLessOrEqual:
+            code(cmpLE);
+        break;
+        case zGreaterOrEqual:
+            code(cmpGE);
+        break;
+        default:
+            return FAIL;
+    }
+    return OK;
 }

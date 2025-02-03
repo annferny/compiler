@@ -28,6 +28,11 @@ int pr1();
 
 int st1();
 int st2();
+int st3();
+int st4();
+int st5();
+int st6();
+int st7();
 int st8();
 int st9();
 int st10();
@@ -41,6 +46,10 @@ int ex3();
 
 int te1();
 int te2();
+
+int co1();
+int set_cond_opp();
+int co8();
 
 #endif //NAMELIST_H
 

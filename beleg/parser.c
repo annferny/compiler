@@ -75,13 +75,13 @@ tBog gStatement[] =
         /* 1*/ {BgSy, {(ul)zResult}, NULL, 2, 0},                  /*(1)---':='--------->(2)*/
         /* 2*/ {BgGr, {.G = gExpression}, st2, 21, 0},            /*(2)---express----->(20)*/
         /* 3*/ {BgSy, {(ul)zIf}, NULL, 4, 7},                      /*(3)---'if'--------->(4)*/
-        /* 4*/ {BgGr, {.G = gCondition}, NULL, 5, 0},              /*(4)---condition---->(5)*/
+        /* 4*/ {BgGr, {.G = gCondition}, st3, 5, 0},              /*(4)---condition---->(5)*/
         /* 5*/ {BgSy, {(ul)zThen}, NULL, 6, 0},                    /*(5)---'then'------->(6)*/
-        /* 6*/ {BgGr, {.G = gStatement}, NULL, 21, 0},             /*(6)---statement--->(20)*/
-        /* 7*/ {BgSy, {(ul)zWhile}, NULL, 8, 11},                  /*(7)---'while'------>(8)*/
-        /* 8*/ {BgGr, {.G = gCondition}, NULL, 9, 0},              /*(8)---condition---->(9)*/
+        /* 6*/ {BgGr, {.G = gStatement}, st4, 21, 0},             /*(6)---statement--->(20)*/
+        /* 7*/ {BgSy, {(ul)zWhile}, st5, 8, 11},                  /*(7)---'while'------>(8)*/
+        /* 8*/ {BgGr, {.G = gCondition}, st6, 9, 0},              /*(8)---condition---->(9)*/
         /* 9*/ {BgSy, {(ul)zDo}, NULL, 10, 0},                      /*(7)---'while'------>(8)*/
-        /*10*/ {BgGr, {.G = gStatement}, NULL, 21, 0},             /*(10)--statement--->(20)*/
+        /*10*/ {BgGr, {.G = gStatement}, st7, 21, 0},             /*(10)--statement--->(20)*/
         /*11*/ {BgSy, {(ul)zBegin}, NULL, 12, 15},                 /*(11)--'begin'----->(12)*/
         /*12*/ {BgGr, {.G = gStatement}, NULL, 13, 0},             /*(12)--statement--->(13)*/
         /*13*/ {BgSy, {.S = ';'}, NULL, 12, 14},                   /*(13)--'*'--------->(12)*/
@@ -108,34 +108,17 @@ tBog gFactor[] =
 tBog gCondition[] =
     {
         /* 0*/ {BgSy, {(ul)zOdd}, NULL, 1, 2},            /*(0)---'Odd'-------->(1)*/
-        /* 1*/ {BgGr, {.G = gExpression}, NULL, 10, 0},   /*(1)---express----->(10)*/
+        /* 1*/ {BgGr, {.G = gExpression}, co1, 10, 0},   /*(1)---express----->(10)*/
         /* 2*/ {BgGr, {.G = gExpression}, NULL, 3, 0},    /*(2)---express------>(3)*/
-        /* 3*/ {BgSy, {(ul)'='}, NULL, 9, 4},             /*(3)----'='--------->(9)*/
-        /* 4*/ {BgSy, {(ul)'#'}, NULL, 9, 5},             /*(4)----'#'--------->(9)*/
-        /* 5*/ {BgSy, {(ul)'<'}, NULL, 9, 6},             /*(5)----'<'--------->(9)*/
-        /* 6*/ {BgSy, {(ul)'>'}, NULL, 9, 7},             /*(6)----'>'--------->(9)*/
-        /* 7*/ {BgSy, {(ul)zLessOrEqual}, NULL, 9, 8},    /*(7)----'<='-------->(9)*/
-        /* 8*/ {BgSy, {(ul)zGreaterOrEqual}, NULL, 9, 0}, /*(8)----'>='-------->(9)*/
-        /* 9*/ {BgGr, {.G = gExpression}, NULL, 10, 0},   /*(9)---express----->(10)*/
+        /* 3*/ {BgSy, {(ul)'='}, set_cond_opp, 9, 4},             /*(3)----'='--------->(9)*/
+        /* 4*/ {BgSy, {(ul)'#'}, set_cond_opp, 9, 5},             /*(4)----'#'--------->(9)*/
+        /* 5*/ {BgSy, {(ul)'<'}, set_cond_opp, 9, 6},             /*(5)----'<'--------->(9)*/
+        /* 6*/ {BgSy, {(ul)'>'}, set_cond_opp, 9, 7},             /*(6)----'>'--------->(9)*/
+        /* 7*/ {BgSy, {(ul)zLessOrEqual}, set_cond_opp, 9, 8},    /*(7)----'<='-------->(9)*/
+        /* 8*/ {BgSy, {(ul)zGreaterOrEqual}, set_cond_opp, 9, 0}, /*(8)----'>='-------->(9)*/
+        /* 9*/ {BgGr, {.G = gExpression}, co8, 10, 0},   /*(9)---express----->(10)*/
         /*10*/ {BgEn, {(ul)0}, NULL, 0, 0}                /*(E)-------------(ENDE) */
 };
-
-//tBog gCondition[] =
-//    {
-//    /* 0*/ {BgSy, {(ul)zOdd}, NULL, 1, 2},            /*(0)---'Odd'-------->(1)*/
-//    /* 1*/ {BgGr, {.G = gExpression}, co1, 10, 0},   /*(1)---express----->(10)*/
-//    /* 2*/ {BgGr, {.G = gExpression}, NULL, 3, 0},    /*(2)---express------>(3)*/
-//    /* 3*/ {BgSy, {(ul)'='}, co2, 9, 4},             /*(3)----'='--------->(9)*/
-//    /* 4*/ {BgSy, {(ul)'#'}, co3, 9, 5},             /*(4)----'#'--------->(9)*/
-//    /* 5*/ {BgSy, {(ul)'<'}, co4, 9, 6},             /*(5)----'<'--------->(9)*/
-//    /* 6*/ {BgSy, {(ul)'>'}, co5, 9, 7},             /*(6)----'>'--------->(9)*/
-//    /* 7*/ {BgSy, {(ul)zLessOrEqual}, co6, 9, 8},    /*(7)----'<='-------->(9)*/
-//    /* 8*/ {BgSy, {(ul)zGreaterOrEqual}, co7, 9, 0}, /*(8)----'>='-------->(9)*/
-//    /* 9*/ {BgGr, {.G = gExpression}, co8, 11, 12},   /*(9)---express----->(10)*/
-//    /*10*/ {BgGr, {(ul)zAND}, NULL, co9, 11},         /*(9)---express----->(10)*/
-//    /*11*/ {BgGr, {(ul)zOR}, NULL, co10, 12},         /*(9)---express----->(10)*/
-//    /*12*/ {BgEn, {(ul)0}, NULL, 0, 0}                /*(E)-------------(ENDE) */
-//    };
 
 int pars(tBog *pGraph)
 {

@@ -43,23 +43,6 @@ static char characterClassVector[128] =
             /*60*/ 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, /*60*/
             /*70*/ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 7 /*70*/
         };
-//to delete
-//static char characterClassVector[128] =
-//        /*         0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F      */
-//        /*---------------------------------------------------------*/
-//        {
-//            /* 0*/ 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, /* 0*/
-//            /*10*/ 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, /*10*/
-//            /*20*/ 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /*20*/
-//            /*30*/ 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0, 5, 4, 6, 0, /*30*/
-//            /*40*/ 0, 10, 10,10,10,10,10, 2, 2, 2, 2, 2, 2, 2, 2, 2, /*40*/
-//            /*50*/ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, /*50*/
-//            /*60*/ 0,10,10,10,10,10,10, 2, 2, 2, 2, 2, 2, 2, 2, 2, /*60*/
-//            /*70*/ 2, 2, 2, 2, 2, 2, 2, 2, 9, 2, 2, 0, 0, 0, 0, 7 /*70*/
-//};
-
-
-
 
 /* Automatentabelle */
 
@@ -81,45 +64,6 @@ static entry automatTable[][8] =
     {{9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}},
     {{9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}, {9, ifEnd}},
 };
-
-
-//static entry vSMatrix[][8]=
-//{
-   // sozei       Ziffer     Buchstaben         :           =           <           >         sonst            0             x            A-Fa-f
-//  {{0, ifslb},{1, ifsl},   {2, ifgl},   {3, ifsl},  {9, ifslb},   {4, ifsl},  {5, ifsl},  {0, ifl}},    {9, ifsl},    {0, ifslb},    {0, ifslb},
-//  {{1, ifb},  {1, ifsl},   {1, ifb},    {1, ifb},   {1, ifb},     {1, ifb},   {1, ifb},   {1, ifb}},    {1,ifb  },    {1,ifb  },     {0, ifslb},
-//  {{2, ifb},  {2, ifsl},   {2, ifgl},   {2, ifb},   {2, ifb},     {2, ifb},   {2, ifb},   {2, ifb}},    {2,ifb  },    {2,ifb  } ,    {0, ifslb},
-//  {{3, ifb},  {3, ifb},    {3, ifb},    {3, ifb},   {6, ifslb},   {3, ifb},   {3, ifb},   {3, ifb}},    {3,ifb  },    {3,ifb  } ,    {0, ifslb},
-//  {{4, ifb},  {4, ifb},    {4, ifb},    {4, ifb},   {7, ifslb},   {4, ifb},   {4, ifb},   {4, ifb}},    {4,ifb  },    {4,ifb  } ,    {0, ifslb},
-//  {{5, ifb},  {5, ifb},    {5, ifb},    {5, ifb},   {8, ifslb},   {5, ifb},   {5, ifb},   {5, ifb}},    {5,ifb  },    {5,ifb  } ,    {0, ifslb},
-//  {{6, ifb},  {6, ifb},    {6, ifb},    {6, ifb},   {6, ifb},     {6, ifb},   {6, ifb},   {6, ifb}},    {6,ifb  },    {6,ifb  } ,    {0, ifslb},
-//  {{7, ifb},  {7, ifb},    {7, ifb},    {7, ifb},   {7, ifb},     {7, ifb},   {7, ifb},   {7, ifb}},    {7,ifb  },    {7,ifb  },     {0, ifslb},
-//  {{8, ifb},  {8, ifb},    {8, ifb},    {8, ifb},   {8, ifb},     {8, ifb},   {8, ifb},   {8, ifb}},    {8,ifb  },    {8,ifb  },     {0, ifslb},
-//  {{9, ifb},  {9, ifb},    {9, ifb},    {9, ifb},   {9, ifb},     {9, ifb},   {9, ifb},   {9, ifb}},    {9,ifb  },    {10,ifsl  },*  {0, ifslb},
-//  {{10, ifsl}, {10, ifsl}, {10, ifsl},  {10, ifsl},  {10, ifsl},  {10, ifsl}, {10, ifsl},  {10, ifsl}}, {10,ifb  },   {11,ifsl  },*  {0, ifslb},
-//  {{10, ifsl}, {10, ifsl}, {10, ifsl},  {10, ifsl},  {10, ifsl},  {10, ifsl}, {10, ifsl},  {10, ifsl}}, {12,ifsl  },  {11,ifb  },    {0, ifslb},
-//  {{12, ifb}, {12, ifb}, {12, ifb},  {12, ifb},  {12, ifb},  {12, ifb}, {12, ifb},  {12, ifsl}},        {12,ifb  },    {12,ifb  },   {0, ifslb},
-
-
-//};
-
-
-
-//static entry automatTable[][8] =
-//{//      sozei                  Ziffer         Buchstaben                       :                   =                  <                   >             sonst            0                x            A-Fa-f
-//1    {{9, ifWriteReadEnd}, {1, ifWriteRead}, {2, ifWriteAsCapitalLetters}, {3, ifWriteRead}, {9, ifWriteReadEnd},{4, ifWriteRead}, {5, ifWriteRead}, {0, ifRead}}   {9, ifsl}}       {2, ifgl}}    {2, ifgl}},
-//2    {{9, ifEnd},          {1, ifWriteRead}, {9, ifEnd},                   {9, ifEnd},       {9, ifEnd},         {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},   {1, ifsl}},      {9, ifEnd}},  {9, ifEnd}},
-//3    {{9, ifEnd},          {2, ifWriteRead}, {2, ifWriteAsCapitalLetters}, {9, ifEnd},       {9, ifEnd},         {9, ifEnd},       {9, ifEnd},       {9, ifEnd} }   {2, ifsl} }      {2, ifgl} }   {2, gl} },
-//4    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {6, ifWriteRead},   {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},   {9, ifEnd}},     {9, ifEnd}},  {9, ifEnd}},
-//5    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {7, ifWriteRead},   {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},   {9, ifEnd}},     {9, ifEnd}},  {9, ifEnd}},
-//6    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {8, ifWriteRead},   {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},   {9, ifEnd}},     {9, ifEnd}},  {9, ifEnd}},
-//7    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {9, ifEnd},         {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},   {9, ifEnd}},     {9, ifEnd}},  {9, ifEnd}},
-//8    {{9, ifEnd},          {9, ifEnd},       {9, ifEnd},                   {9, ifEnd},       {9, ifEnd},         {9, ifEnd},       {9, ifEnd},       {9, ifEnd}},   {9, ifEnd}},     {9, ifEnd}},  {9, ifEnd}},
-//9    {{11, ifEnd},         {1, ifsl},        {11, ifEnd},                  {11, ifEnd},      {11, ifEnd},        {11, ifEnd},      {11, ifEnd},      {11 ifEnd}},   {11, ifEnd}},    {10, ifgl}},  {11,ifEnd}}
-//10   {{11, ifEnd},         {10, ifsl},       {11, ifEnd},                  {11, ifEnd},      {11, ifEnd},        {11, ifEnd},      {11, ifEnd},      {11, ifEnd}},  {10, ifsl}},     {11, ifEnd}}, {10,ifgl}}
-//11   {{11, ifEnd},         {11, ifEnd},      {11, ifEnd},                  {11, ifEnd},      {11, ifEnd},        {11, ifEnd},      {11, ifEnd},      {11, ifEnd}},  {11, ifEnd}},    {11, ifEnd}}, {11,ifEnd}},
-//};
-
 
 /* Ausgabefunktionen des Automaten */
 static void read(void);
