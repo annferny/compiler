@@ -20,7 +20,6 @@ char*  pCode; //curr
 unsigned int cbuf_size;
 int    iCode;
 
-// TODO: probably add an update for the current procedure
 tIdentifier *createIdentifier(char *pIdentifier) {
     tIdentifier *identifier = malloc(sizeof(tIdentifier));
     identifier->kennzeichen = KzIdentifier;
